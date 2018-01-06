@@ -1,5 +1,5 @@
 {
-    "name": "sinevia/cms",
+    "name": "sinevia/laravel-cms",
     "type": "library",
     "description": "Content Management System for Laravel",
     "keywords": [
