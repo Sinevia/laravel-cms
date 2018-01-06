@@ -1,0 +1,174 @@
+<!-- START: Needed -->
+<script src="//tinymce.cachefly.net/4.0/tinymce.min.js"></script>
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/codemirror/4.12.0/codemirror.css" />
+<script src="//cdnjs.cloudflare.com/ajax/libs/codemirror/4.12.0/codemirror.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/codemirror/4.12.0/addon/edit/matchbrackets.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/codemirror/4.12.0/mode/htmlmixed/htmlmixed.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/codemirror/4.12.0/mode/xml/xml.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/codemirror/4.12.0/mode/javascript/javascript.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/codemirror/4.12.0/mode/css/css.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/codemirror/4.12.0/mode/clike/clike.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/codemirror/4.12.0/mode/php/php.js"></script>
+<!-- END: Needed -->
+<!-- START: Message Area -->
+<div class="container">
+    <div  id="alert-area" class="span12" style="margin-left: 0px;">
+        <?php if ($message != '') { ?>
+            <?php if (stripos($message, 'success')) { ?>
+                <div  class="alert alert-message fade in alert-success data-alert">
+                    <a class="close" data-dismiss='alert'>×</a>
+                    <strong>Success</strong> <?php echo $message; ?>
+                </div>
+            <?php } else { ?>
+                <div class="alert alert-message fade in alert-danger data-alert">
+                    <a class="close" data-dismiss='alert'>×</a>
+                    <strong>Error</strong> <?php echo $message; ?>
+                </div>
+            <?php } ?>
+        <?php } ?>
+    </div>
+</div>
+<script>
+    $(function() {
+        setTimeout(function() {
+            $('#alert-area').hide();
+        }, 15000);
+    });
+</script>
+<!-- END: Message Area -->
+<div class='container'>
+    <h3>Edit Widget: <?php echo $widget_title; ?> (#<?php echo $widget_id; ?>)</h3>
+    <form name="form_widget_add" action="" method="post">
+        <div class="form-group">
+            <label for="widget_title">
+                Title
+            </label>
+            <input class="form-control" name="widget_title" id="widget_title" type="text" value="<?php echo $widget_title; ?>" />
+        </div>
+        <div class="form-group">
+            <label for="widget_status">
+                Status
+            </label>
+            <select class="form-control" name="widget_status" id="widget_status">
+                <option value=""></option>
+                <?php $selected = ($widget_status == 'Deleted') ? 'selected="selected"' : ''; ?>
+                <option value="Deleted" <?php echo $selected ?> >Deleted</option>
+                <?php $selected = ($widget_status == 'Published') ? 'selected="selected"' : ''; ?>
+                <option value="Published" <?php echo $selected ?> >Published</option>
+                <?php $selected = ($widget_status == 'Unpublished') ? 'selected="selected"' : ''; ?>
+                <option value="Unpublished" <?php echo $selected ?> >Unpublished</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="widget_cache">
+                Cache
+            </label>
+            <select class="form-control" name="widget_cache" id="widget_status">
+                <option value="-1">No Cache</option>
+                <?php for ($i = 30; $i < 601; $i+=30) { ?>
+                    <?php $selected = ($widget_cache == $i) ? 'selected="selected"' : ''; ?>
+                    <option value="<?php echo $i; ?>" <?php echo $selected ?> ><?php echo ($i / 60); ?> min</option>
+                <?php } ?>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="widget_type">
+                Type
+            </label>
+            <select class="form-control" name="widget_type" id="widget_type" onchange="type_selected();">
+                <option value="">None</option>
+                <?php asort($types); ?>
+                <?php foreach ($types as $type) { ?>
+                    <?php $selected = ($widget_type == basename($type)) ? 'selected="selected"' : ''; ?>
+                    <option value="<?php echo basename($type); ?>" <?php echo $selected ?>><?php echo basename($type); ?></option>
+                <?php } ?>
+            </select>
+        </div>
+        
+        <div id="widget_parameters"></div>
+        
+        <script>
+            var ROOT_URL = '<?php echo ROOT_URL; ?>';
+            var WIDGETS_TEMPLATE_URL = '<?php echo WebsiteModel::getWidgetsTemplatesUrl(); ?>';
+            var types = <?php echo json_encode($types); ?>;
+            var widget_parameters = <?php echo json_encode($widget_parameters); ?>;
+            $(function() {
+                type_selected();
+            });
+            function type_selected() {
+                var type = $('#widget_type').val();
+                if (type === "") {
+                    return;
+                }
+                var url = WIDGETS_TEMPLATE_URL + '/' + type + '/parameters.phtml';
+                console.log(url);
+                $('#widget_parameters').load(url, function() {
+                    form_populate($('#widget_parameters'), widget_parameters);
+                });
+
+            }
+            function form_populate(form, data) {
+                //console.log(data);
+
+                $.each(data, function(key, value) {
+                    key = 'widget_parameter[' + key + ']';
+                    var name_key = key.split('[').join('\\[').split(']').join('\\]');
+                    var $ctrl = $('[name=' + name_key + ']', form);
+                    var type = $ctrl.attr("type");
+                    var tag = $ctrl.prop("tagName").toLowerCase();
+                    console.log(name_key + ":" + value);
+                    console.log(tag);
+                    if (tag === 'input') {
+                        var type = $ctrl.attr("type");
+                        if (type === "radio" || type === "checkbox") {
+                            $ctrl.each(function() {
+                                if ($(this).attr('value') === value) {
+                                    $(this).attr("checked", value);
+                                }
+                            });
+                        } else {
+                            $ctrl.val(value);
+                        }
+                    }
+                    if (tag === "select") {
+                        $ctrl.val(value);
+                    }
+                    if (tag === "textarea") {
+                        $ctrl.val(value);
+                    }
+                });
+            }
+        </script>
+
+        <br>
+        <div>
+            <a href="<?php echo ADMIN_URL . '?widgets-manager'; ?>">Cancel</a>
+            &nbsp; &nbsp;
+            <button id="button_save" type="button" class="btn btn-info" onclick="$('#form_action').val('save');
+                    form_widget_add.submit();">
+                <span class="glyphicon glyphicon-floppy-save"></span>
+                Save
+            </button>
+            &nbsp;
+            <button type="button" class="btn btn-info"  onclick="$('#form_action').val('save-and-exit');
+                    form_widget_add.submit();">
+                <span class="glyphicon glyphicon-floppy-saved"></span>
+                Save &amp; Continue
+            </button>
+        </div>
+        <input type="hidden" name="sid" value="<?php echo session_id(); ?>">
+        <input type="hidden" name="action" id="form_action" value="save-and-exit">
+    </form>
+
+    <script>
+        $(window).keypress(function(event) {
+            if (!(event.which === 115 && event.ctrlKey) && !(event.which === 19)) {
+                return true;
+            }
+            $('#button_save').trigger('click');
+            event.preventDefault();
+            return false;
+        });
+    </script>
+</div>
+
