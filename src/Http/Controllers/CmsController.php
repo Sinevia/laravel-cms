@@ -1,6 +1,6 @@
 <?php
 
-namespace Sinevia\Cms\Controllers;
+namespace Sinevia\Cms\Http\Controllers;
 
 /**
  * Contains simple CMS functionality
