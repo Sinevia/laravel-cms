@@ -211,7 +211,7 @@ class CmsController extends \Illuminate\Routing\Controller {
         $templateList = \Sinevia\Cms\Models\Template::orderBy('Title')->get();
 
         $viewLink = $page->url();
-        $mediaManagerLink = action('MediaController@getMediaManager');
+        $mediaManagerLink = \Sinevia\Cms\Helpers\Links::adminMediaManager();
 
         return view('cms::admin/page-update', get_defined_vars());
     }
