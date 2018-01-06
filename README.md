@@ -1,3 +1,3 @@
 # Laravel CMS
 
-A "plug-and-play" CMS for Laravel
+A "plug-and-play" content managing system (CMS) for Laravel
