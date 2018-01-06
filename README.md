@@ -1,2 +1,3 @@
-# laravel-cms
-A CMS for Laravel
+# Laravel CMS
+
+A "plug-and-play" CMS for Laravel
