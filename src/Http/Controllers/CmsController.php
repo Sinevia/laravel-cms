@@ -67,7 +67,7 @@ class CmsController extends \Illuminate\Routing\Controller {
                         'page_meta_robots' => $pageMetaRobots,
                         'page_canonical_url' => $pageCanonicalUrl,
                         'page_title' => $pageTitle,
-                        'page_content' => \App\Helpers\Sinevia\Template::fromString($pageContent),
+                        'page_content' => \Sinevia\Cms\Helpers\Template::fromString($pageContent),
             ]);
 
             preg_match_all("|\[\[BLOCK_(.*)\]\]|U", $webpage, $out, PREG_PATTERN_ORDER);
