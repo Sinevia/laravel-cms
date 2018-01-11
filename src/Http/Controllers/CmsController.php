@@ -31,9 +31,29 @@ class CmsController extends \Illuminate\Routing\Controller {
                 ->first();
 
         if ($page == null) {
-            return 'Page not found';
+            $patterns = array(
+                ':any' => '([^/]+)',
+                ':num' => '([0-9]+)',
+                ':all' => '(.*)',
+                ':string' => '([a-zA-Z]+)',
+                ':number' => '([0-9]+)',
+                ':alpha' => '([a-zA-Z0-9-_]+)'
+            );
+            $aliases = \Sinevia\Cms\Models\Page::pluck('Alias', 'Id')->toArray();
+            $aliases = array_filter($aliases, function($alias) {
+                return str_contains($alias, [':']);
+            });
+            foreach ($aliases as $pageId => $alias) {
+                $alias = strtr($alias, $patterns);
+                if (preg_match('#^' . $alias . '$#', '/' . $uri, $matched)) {
+                    $page = \Sinevia\Cms\Models\Page::find($pageId);
+                };
+            }
+            if ($page == null) {
+                return 'Page not found';
+            }
         }
-        
+
         $pageTranslation = $page->translation('en');
         if ($pageTranslation == null) {
             die('Page Translation not found ' . $page->Id);
@@ -46,7 +66,7 @@ class CmsController extends \Illuminate\Routing\Controller {
         $pageCanonicalUrl = $page->CanonicalUrl != "" ? $page->CanonicalUrl : $page->url();
         $templateId = $page->TemplateId;
 
-        
+
         $template = \Sinevia\Cms\Models\Template::find($page->TemplateId);
 
         if ($template != null) {
@@ -83,7 +103,8 @@ class CmsController extends \Illuminate\Routing\Controller {
                 $blockContentDynamic = \Sinevia\Cms\Helpers\Template::fromString($blockContent);
                 $webpage = str_replace("[[BLOCK_$blockId]]", $blockContentDynamic, $webpage);
             }
-            return $webpage;
+            // return $webpage;
+            return \Sinevia\Cms\Models\Widget::renderWidgets($webpage);
         }
 
 
@@ -94,11 +115,6 @@ class CmsController extends \Illuminate\Routing\Controller {
 
 
         require_once app_path('Helpers/helpers.php');
-        
-
-        
-        
-        
     }
 
     function getBlockManager() {
@@ -299,8 +315,31 @@ class CmsController extends \Illuminate\Routing\Controller {
         $content = request('Content', old('Content', $widget->Content));
         $title = request('Title', old('Title', $widget->Title));
         $status = request('Status', old('Status', $widget->Status));
+        $parameters = request('Parameters', old('Parameters', json_decode($widget->Parameters, true)));
+        $cache = request('Cache', old('Cache', $widget->Cache));
+        $type = request('Type', old('Type', $widget->Type));
+
+        $types = \Sinevia\Cms\Helpers\CmsHelper::directoryListDirectories(resource_path('widgets'));
+        $parametersFormUrl = \Sinevia\Cms\Helpers\Links::adminWidgetPatametersFormAjax();
+
 
         return view('cms::admin/widget-update', get_defined_vars());
+    }
+
+    function anyWidgetParametersFormAjax() {
+        $type = trim(request('Type', ''));
+        if ($type == "") {
+            return 'Please, select a Type for this widget';
+        }
+        $widgetPath = resource_path('widgets/' . $type);
+        if (file_exists($widgetPath) == false) {
+            return 'Error. Widget not found';
+        }
+        $parametersFormPath = $widgetPath . '/parameters.phtml';
+        if (file_exists($parametersFormPath) == false) {
+            return 'Error. No parameters found';
+        }
+        return \Sinevia\Template::fromFile($parametersFormPath);
     }
 
     function postBlockCreate() {
@@ -932,9 +971,11 @@ class CmsController extends \Illuminate\Routing\Controller {
         $widget = new \Sinevia\Cms\Models\Widget;
         $widget->Status = 'Draft';
         $widget->Title = request('Title');
+        $widget->Type = trim(request('Type', ''));
+        $widget->Parameters = json_encode(request('Parameters', []));
 
         if ($widget->save() !== false) {
-            return redirect(action('Admin\CmsController@getWidgetUpdate') . '?WidgetId=' . $widget->Id)
+            return redirect(\Sinevia\Cms\Helpers\Links::adminWidgetUpdate(['WidgetId' => $widget->Id]))
                             ->withSuccess('Widget successfully created');
         }
 
@@ -944,7 +985,7 @@ class CmsController extends \Illuminate\Routing\Controller {
     function postWidgetDelete() {
         $widget = \Sinevia\Cms\Models\Widget::find(request('WidgetId'));
         if ($widget == null) {
-            return redirect('Admin\CmsController@getWidgetManager')->withErrors('Widget not found');
+            return redirect()->back()->withErrors('Widget not found');
         }
 
         $widget->Status = 'Deleted';
@@ -955,12 +996,13 @@ class CmsController extends \Illuminate\Routing\Controller {
     function postWidgetUpdate() {
         $widget = \Sinevia\Cms\Models\Widget::find(request('WidgetId'));
         if ($widget == null) {
-            return redirect('Admin\CmsController@getWidgetManager')->withErrors('Widget not found');
+            return redirect()->back()->withErrors('Widget not found');
         }
 
         $rules = array(
             'Status' => 'required', // required
             'Title' => 'required', // required
+            'Parameters' => 'required|array', // required
         );
 
         $validator = \Validator::make(\Request::all(), $rules);
@@ -972,12 +1014,16 @@ class CmsController extends \Illuminate\Routing\Controller {
         $content = request('Content', $widget->Content);
         $status = request('Status', $widget->Status);
         $title = request('Title', $widget->Title);
+        $parameters = request('Parameters', $widget->Parameters);
+        $type = request('Type', $widget->Type);
 
         \DB::beginTransaction();
         try {
             $widget->Status = $status;
-            $widget->Content = $content;
+            //$widget->Content = $content;
             $widget->Title = $title;
+            $widget->Parameters = json_encode($parameters);
+            $widget->Type = $type;
             $widget->save();
 
             $result = \DB::commit();
@@ -988,7 +1034,7 @@ class CmsController extends \Illuminate\Routing\Controller {
                     return redirect()->back();
                 }
                 \Session::flash('success', 'You successuly updated the widget');
-                return redirect(action('Admin\CmsController@getWidgetManager'));
+                return redirect(\Sinevia\Cms\Helpers\Links::adminWidgetManager());
             }
         } catch (Exception $e) {
             \DB::rollback();

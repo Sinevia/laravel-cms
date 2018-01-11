@@ -6,10 +6,10 @@
 <h1>
     Widget Manager
 </h1>
-<ol class="breadcrumb">
-    <li><a href="<?php echo action('Admin\HomeController@anyIndex'); ?>"><i class="fa fa-dashboard"></i> Home</a></li>
-    <li><a href="<?php echo action('Admin\CmsController@getWidgetManager'); ?>">CMS</a></li>
-    <li class="active">Widgets</li>
+<ol class="breadcrumb">    
+    <li><a href="<?php echo \Sinevia\Cms\Helpers\Links::adminHome(); ?>"><i class="fa fa-dashboard"></i> Home</a></li>
+    <li><a href="<?php echo \Sinevia\Cms\Helpers\Links::adminHome(); ?>">CMS</a></li>
+    <li class="active"><a href="<?php echo \Sinevia\Cms\Helpers\Links::adminWidgetManager(); ?>">Widgets</a></li>
 </ol>
 @stop
 
@@ -126,7 +126,7 @@
                         <?php echo $widget->Status; ?><br>
                     </td>
                     <td style="text-align:center;vertical-align: middle;">
-                        <a href="<?php echo URL::action('Admin\CmsController@getWidgetUpdate'); ?>?WidgetId=<?php echo $widget->Id; ?>" class="btn btn-sm btn-warning">
+                        <a href="<?php echo \Sinevia\Cms\Helpers\Links::adminWidgetUpdate(['WidgetId'=>$widget->Id]); ?>" class="btn btn-sm btn-warning">
                             <span class="glyphicon glyphicon-edit"></span>
                             Edit
                         </a>
@@ -156,7 +156,7 @@
                 <h3>New Widget</h3>
             </div>
             <div class="modal-body">
-                <form name="FormWidgetCreate" method="post" action="<?php echo action('Admin\CmsController@postWidgetCreate'); ?>">
+                <form name="FormWidgetCreate" method="post" action="<?php echo \Sinevia\Cms\Helpers\Links::adminWidgetCreate(); ?>">
                     <div class="form-group">
                         <label>Title</label>
                         <input name="Title" value="" class="form-control" />
@@ -201,7 +201,7 @@
                     Note! This action cannot be undone.
                 </div>
 
-                <form name="FormWidgetDelete" method="post" action="<?php echo action('Admin\CmsController@postWidgetDelete'); ?>">
+                <form name="FormWidgetDelete" method="post" action="<?php echo \Sinevia\Cms\Helpers\Links::adminWidgetDelete(); ?>">
                     <input type="hidden" id="template_delete_id" name="WidgetId" value="">
                     <?php echo csrf_field(); ?>
                 </form>

@@ -94,6 +94,25 @@ class Links {
     public static function adminTemplateTranslationDelete($queryData = []) {
         return action('\Sinevia\Cms\Http\Controllers\CmsController@postTemplateTranslationDelete') . self::buildQueryString($queryData);
     }
+    public static function adminWidgetManager($queryData = []) {
+        return action('\Sinevia\Cms\Http\Controllers\CmsController@getWidgetManager') . self::buildQueryString($queryData);
+    }
+
+    public static function adminWidgetCreate($queryData = []) {
+        return action('\Sinevia\Cms\Http\Controllers\CmsController@postWidgetCreate') . self::buildQueryString($queryData);
+    }
+    
+    public static function adminWidgetDelete($queryData = []) {
+        return action('\Sinevia\Cms\Http\Controllers\CmsController@postWidgetDelete') . self::buildQueryString($queryData);
+    }
+    
+    public static function adminWidgetPatametersFormAjax($queryData = []) {
+        return action('\Sinevia\Cms\Http\Controllers\CmsController@anyWidgetParametersFormAjax') . self::buildQueryString($queryData);
+    }
+    
+    public static function adminWidgetUpdate($queryData = []) {
+        return action('\Sinevia\Cms\Http\Controllers\CmsController@getWidgetUpdate') . self::buildQueryString($queryData);
+    }
 
     private static function buildQueryString($queryData = []) {
         $queryString = '';

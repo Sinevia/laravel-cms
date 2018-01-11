@@ -8,9 +8,9 @@
     <small>(#<?php echo $widget->Id; ?>)</small>
 </h1>
 <ol class="breadcrumb">
-    <li><a href="<?php echo action('Admin\HomeController@anyIndex'); ?>"><i class="fa fa-dashboard"></i> Home</a></li>
-    <li><a href="<?php echo action('Admin\CmsController@getWidgetManager'); ?>">CMS</a></li>
-    <li><a href="<?php echo action('Admin\CmsController@getWidgetManager'); ?>">Widgets</a></li>
+    <li><a href="<?php echo \Sinevia\Cms\Helpers\Links::adminHome(); ?>"><i class="fa fa-dashboard"></i> Home</a></li>
+    <li><a href="<?php echo \Sinevia\Cms\Helpers\Links::adminHome(); ?>">CMS</a></li>
+    <li class="active"><a href="<?php echo \Sinevia\Cms\Helpers\Links::adminWidgetManager(); ?>">Widgets</a></li>
     <li class="active">Edit Widget</li>
 </ol>
 @stop
@@ -22,7 +22,7 @@
 <div class="box box-info">
     <div class="box-header">
         <div>
-            <a href="<?php echo action('Admin\CmsController@getWidgetManager'); ?>" class="btn btn-info">
+            <a href="<?php echo \Sinevia\Cms\Helpers\Links::adminWidgetManager(); ?>" class="btn btn-info">
                 <span class="glyphicon glyphicon-chevron-left"></span>
                 Cancel
             </a>
@@ -113,13 +113,95 @@
             </div>
             <!-- END: Content -->
 
+            <div class="form-group">
+                <label>
+                    Cache
+                </label>
+                <select class="form-control" name="Cache">
+                    <option value="-1">No Cache</option>
+                    <?php for ($i = 30; $i < 601; $i += 30) { ?>
+                        <?php $selected = ($cache == $i) ? 'selected="selected"' : ''; ?>
+                        <option value="<?php echo $i; ?>" <?php echo $selected ?> >
+                            <?php echo ($i / 60); ?> min
+                        </option>
+                    <?php } ?>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>
+                    Type
+                </label>
+                <select class="form-control" name="Type" id="Type" onchange="type_selected();">
+                    <option value="">None</option>
+                    <?php asort($types); ?>
+                    <?php foreach ($types as $t) { ?>
+                        <?php $selected = ($type == basename($t)) ? 'selected="selected"' : ''; ?>
+                        <option value="<?php echo basename($t); ?>" <?php echo $selected ?>>
+                            <?php echo basename($t); ?>
+                        </option>
+                    <?php } ?>
+                </select>
+            </div>
+
+            <div id="widget_parameters"></div>
+
+            <script>
+                $(function () {
+                    type_selected();
+                });
+
+                function type_selected() {
+                    var parameters = <?php echo json_encode($parameters); ?>;
+                    var type = $('#Type').val();
+                    if (type === "") {
+                        $('#widget_parameters').html('Please, select a type');
+                    }
+                    var url = '<?php echo $parametersFormUrl; ?>' + '?Type=' + type;
+                    $('#widget_parameters').load(url, function () {
+                        form_populate($('#widget_parameters'), parameters);
+                    });
+
+                }
+                function form_populate(form, data) {
+                    // DEBUG: console.log(data);
+
+                    $.each(data, function (key, value) {
+                        key = 'Parameters[' + key + ']';
+                        var name_key = key.split('[').join('\\[').split(']').join('\\]');
+                        var $ctrl = $('[name=' + name_key + ']', form);
+                        var type = $ctrl.attr("type");
+                        var tag = $ctrl.prop("tagName").toLowerCase();
+                        console.log(name_key + ":" + value);
+                        console.log(tag);
+                        if (tag === 'input') {
+                            var type = $ctrl.attr("type");
+                            if (type === "radio" || type === "checkbox") {
+                                $ctrl.each(function () {
+                                    if ($(this).attr('value') === value) {
+                                        $(this).attr("checked", value);
+                                    }
+                                });
+                            } else {
+                                $ctrl.val(value);
+                            }
+                        }
+                        if (tag === "select") {
+                            $ctrl.val(value);
+                        }
+                        if (tag === "textarea") {
+                            $ctrl.val(value);
+                        }
+                    });
+                }
+            </script>
+
             <input type="hidden" name="_token" value="{{ csrf_token() }}">
             <input type="hidden" name="action" id="form_action" value="save-and-exit">
         </form>
     </div>
 
     <div class="box box-footer">
-        <a href="<?php echo action('Admin\CmsController@getWidgetManager'); ?>" class="btn btn-info">
+        <a href="<?php echo \Sinevia\Cms\Helpers\Links::adminWidgetManager(); ?>" class="btn btn-info">
             <span class="glyphicon glyphicon-chevron-left"></span>
             Cancel
         </a>
@@ -151,4 +233,8 @@
     });
 </script>
 
+<p class="text-info">
+    <i class="glyphicon glyphicon-info-sign"></i>
+    To use this widget in your website use the following shortcode [[WIDGET_<?php echo $widget->Id ?>]]
+</p>
 @stop
