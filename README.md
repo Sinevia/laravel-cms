@@ -28,7 +28,7 @@ Word of warning. Do use a stable package, as "dev-master" is a work in progress.
 Removal of the package is a breeze:
 
 ```php
-composer require sinevia/laravel-cms
+composer remove sinevia/laravel-cms
 ```
 
 Optionally, delete the CMS tables (all which start with the snv_cms_ prefix)
