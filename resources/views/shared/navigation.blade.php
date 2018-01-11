@@ -2,6 +2,7 @@
 $blockCount = \Sinevia\Cms\Models\Block::where('Status', '<>', 'Deleted')->count();
 $pageCount = \Sinevia\Cms\Models\Page::where('Status', '<>', 'Deleted')->count();
 $templateCount = \Sinevia\Cms\Models\Template::where('Status', '<>', 'Deleted')->count();
+$widgetCount = \Sinevia\Cms\Models\Widget::where('Status', '<>', 'Deleted')->count();
 ?>
 <div class="panel panel-default">
     <div class="panel-body" style="padding: 2px;">
@@ -25,6 +26,12 @@ $templateCount = \Sinevia\Cms\Models\Template::where('Status', '<>', 'Deleted')-
                 <a href="<?php echo \Sinevia\Cms\Helpers\Links::adminBlockManager(); ?>">
                     Blocks
                     <span class="badge"><?php echo $blockCount; ?></span>
+                </a>
+            </li>
+            <li>
+                <a href="<?php echo \Sinevia\Cms\Helpers\Links::adminWidgetManager(); ?>">
+                    Widget
+                    <span class="badge"><?php echo $widgetCount; ?></span>
                 </a>
             </li>
             <li>

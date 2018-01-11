@@ -16,13 +16,8 @@ class CmsServiceProvider extends ServiceProvider {
             dirname(__DIR__) . '/config/cms.php' => config_path('cms.php'),
             $this->loadMigrationsFrom(dirname(__DIR__) . '/database/migrations'),
             $this->loadViewsFrom(dirname(__DIR__) . '/resources/views', 'cms'),
-                //$this->loadRoutesFrom(dirname(__DIR__).'/routes.php'),            
+            //$this->loadRoutesFrom(dirname(__DIR__).'/routes.php'),            
         ]);
-//        Route::get('/admin', [
-            //'middleware' => $authMiddleware,
-            //'as' => 'tickets.install.index',
-            //'uses' => 'Kordy\Ticketit\Controllers\InstallController@index',
-//        ]);
     }
 
     /**
