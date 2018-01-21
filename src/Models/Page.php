@@ -11,6 +11,15 @@ class Page extends BaseModel {
     public $incrementing = false;
     public $useMicroId = true;
 
+    public function createVersion() {
+        $pageWithTranslationsArray = $this->toArray();
+        $version = Version::createVersion('CmsPage', $this->Id, $pageWithTranslationsArray);
+        if(is_null($version)==false){
+            return true;
+        }
+        return false;
+    }
+
     public function translations() {
         return $this->hasMany('Sinevia\Cms\Models\PageTranslation', 'PageId');
     }

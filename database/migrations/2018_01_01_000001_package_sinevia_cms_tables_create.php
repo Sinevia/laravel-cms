@@ -1,6 +1,6 @@
 <?php
 
-class PackageSiineviaCmsTablesCreate extends Illuminate\Database\Migrations\Migration {
+class PackageSineviaCmsTablesCreate extends Illuminate\Database\Migrations\Migration {
 
     /**
      * Run the migrations.
@@ -14,6 +14,8 @@ class PackageSiineviaCmsTablesCreate extends Illuminate\Database\Migrations\Migr
         Sinevia\Cms\Models\PageTranslation::tableCreate();
         Sinevia\Cms\Models\Block::tableCreate();
         Sinevia\Cms\Models\BlockTranslation::tableCreate();
+        Sinevia\Cms\Models\Widget::tableCreate();
+        Sinevia\Cms\Models\Version::tableCreate();
     }
 
     /**
@@ -28,6 +30,8 @@ class PackageSiineviaCmsTablesCreate extends Illuminate\Database\Migrations\Migr
         Sinevia\Cms\Models\PageTranslation::tableDelete();
         Sinevia\Cms\Models\Block::tableDelete();
         Sinevia\Cms\Models\BlockTranslation::tableDelete();
+        Sinevia\Cms\Models\Widget::tableDelete();
+        Sinevia\Cms\Models\Version::tableDelete();
     }
 
 }

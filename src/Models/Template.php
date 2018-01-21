@@ -11,6 +11,15 @@ class Template extends BaseModel {
     public $incrementing = false;
     public $useMicroId = true;
     
+    public function createVersion() {
+        $templateWithTranslationsArray = $this->toArray();
+        $version = Version::createVersion('CmsTemplate', $this->Id, $templateWithTranslationsArray);
+        if(is_null($version)==false){
+            return true;
+        }
+        return false;
+    }
+    
     public function translations() {
         return $this->hasMany('Sinevia\Cms\Models\TemplateTranslation', 'TemplateId');
     }
