@@ -1,5 +1,5 @@
 <?php
-namespace Sinevia\Knowledge;
+namespace Sinevia\Cms;
 
 class Facade extends \Illuminate\Support\Facades\Facade
 {
