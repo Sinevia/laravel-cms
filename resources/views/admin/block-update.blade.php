@@ -1,4 +1,6 @@
-@extends('admin.layout')
+<?php if (View::exists(config('cms.layout-master'))) { ?>
+    @extends(config('cms.layout-master'))
+<?php } ?>
 
 @section('webpage_title', 'Edit Block')
 
