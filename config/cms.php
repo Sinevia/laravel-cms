@@ -11,5 +11,9 @@ return [
     // URLs
     'urls' => [
         'media-manager' => '/your-media-manager-url',
-    ]
+    ],
+    'paths' => [
+        // path to widgets, in your resources directory
+        'widgets' => 'widgets',
+    ],
 ];
