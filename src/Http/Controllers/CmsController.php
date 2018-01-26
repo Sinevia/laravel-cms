@@ -318,10 +318,19 @@ class CmsController extends \Illuminate\Routing\Controller {
         $parameters = request('Parameters', old('Parameters', json_decode($widget->Parameters, true)));
         $cache = request('Cache', old('Cache', $widget->Cache));
         $type = request('Type', old('Type', $widget->Type));
+        
+        $widgetsDirectory = \Sinevia\Cms\Models\Widget::path();
+        
+        if ($widgetsDirectory == '') {
+            return back()->withErrors('Widgets directory not recognized. Is it set in the CMS configuration settings?');
+        }
+        
+        if (is_dir($widgetsDirectory) == false) {
+            return back()->withErrors('Widgets directory does not exist. Is it a valid directory set in the CMS configuration settings?');
+        }
 
         $types = \Sinevia\Cms\Helpers\CmsHelper::directoryListDirectories(resource_path('widgets'));
         $parametersFormUrl = \Sinevia\Cms\Helpers\Links::adminWidgetPatametersFormAjax();
-
 
         return view('cms::admin/widget-update', get_defined_vars());
     }
