@@ -8,7 +8,13 @@ class Widget extends BaseModel {
     protected $table = 'snv_cms_widget';
     
     public static function path($type = "") {
-        return resource_path('widgets/' . trim($type));
+        $widgetsPath = trim(config('cms::paths.widgets', ''));
+        
+        if ($widgetsPath == '') {
+            return '';
+        }
+        
+        return resource_path($widgetsPath . '/' . trim($type));
     }
     
     public function render() {
