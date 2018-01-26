@@ -153,6 +153,11 @@
             <input type="hidden" name="_token" value="{{ csrf_token() }}">
             <input type="hidden" name="action" id="form_action" value="save-and-exit">
         </form>
+        
+        <p class="text-info">
+            <i class="glyphicon glyphicon-info-sign"></i>
+            To use this block in your website use the following shortcode [[BLOCK_<?php echo $block->Id ?>]]
+        </p>
 
     </div>
 
