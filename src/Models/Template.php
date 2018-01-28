@@ -20,6 +20,31 @@ class Template extends BaseModel {
         return false;
     }
     
+    public function render($language, $data) {
+        $templateTranslation = $this->translation($language);
+        if ($templateTranslation == null) {
+            die('Transation for template #' . $template->Id . ' not found');
+        }
+        $templateContent = $templateTranslation->Content;
+
+        $webpage = \Sinevia\Cms\Helpers\Template::fromString($templateContent, $data);
+
+        preg_match_all("|\[\[BLOCK_(.*)\]\]|U", $webpage, $out, PREG_PATTERN_ORDER);
+        $blockIds = $out[1];
+        foreach ($blockIds as $blockId) {
+            $block = Block::find($blockId);
+            if ($block != null) {
+                $blockTranslation = $block->translation('en');
+                $blockContent = $blockTranslation->Content;
+            } else {
+                $blockContent = '';
+            }
+            $blockContentDynamic = \Sinevia\Cms\Helpers\Template::fromString($blockContent);
+            $webpage = str_replace("[[BLOCK_$blockId]]", $blockContentDynamic, $webpage);
+        }
+        return $webpage;
+    }
+    
     public function translations() {
         return $this->hasMany('Sinevia\Cms\Models\TemplateTranslation', 'TemplateId');
     }
