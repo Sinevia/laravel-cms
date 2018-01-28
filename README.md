@@ -57,7 +57,7 @@ Route::group(['prefix' => '/admin'], function () {
 
 1. Advanced usage. Use the CMS templates to wrap around custom code with blade templates:
 
-```
+```php
 // A small helper function to place HTML in the CMS template
 function viewInTemplate($pageTitle, $pageContent) {
     $template = \Sinevia\Cms\Models\Template::find('20180126000128528925');
