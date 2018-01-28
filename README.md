@@ -52,3 +52,23 @@ Route::group(['prefix' => '/admin'], function () {
     });
 });
 ```
+
+## Quick Snippets
+
+1. Advanced usage. Use the CMS templates to wrap around custom code with blade templates:
+
+```
+// A small helper function to place HTML in the CMS template
+function viewInTemplate($pageTitle, $pageContent) {
+    $template = \Sinevia\Cms\Models\Template::find('20180126000128528925');
+
+    return $template->render('en', [
+                'page_title' => $pageTitle,
+                'page_content' => $pageContent,
+    ]);
+}
+
+// Then you may use from your controller, for instance to show a login form in
+$html = view('guest/auth/login', get_defined_vars())->render();
+return viewInTemplate('Login', $pageContent)
+```
