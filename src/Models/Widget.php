@@ -28,7 +28,7 @@ class Widget extends BaseModel {
         }
         
         $parameters = trim($this->Parameters) == "" ? [] : json_decode(trim($this->Parameters), true);
-        return \Sinevia\Template::fromFile($templateFilePath, $parameters);
+        return \Sinevia\Cms\Helpers\Template::fromFile($templateFilePath, $parameters);
     }
 
     public static function renderWidgets($string) {
