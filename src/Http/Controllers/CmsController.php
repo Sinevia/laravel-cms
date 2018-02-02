@@ -348,7 +348,7 @@ class CmsController extends \Illuminate\Routing\Controller {
         if (file_exists($parametersFormPath) == false) {
             return 'Error. No parameters found';
         }
-        return \Sinevia\Template::fromFile($parametersFormPath);
+        return \Sinevia\Cms\Models\Template::fromFile($parametersFormPath);
     }
 
     function postBlockCreate() {
