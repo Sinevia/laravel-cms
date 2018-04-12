@@ -144,7 +144,7 @@
                         <?php echo $page['Status']; ?><br>
                     </td>
                     <td style="text-align:center;vertical-align: middle;">
-                        <a href="<?php echo $page->url(); ?>" class="btn btn-success" target="_blank">
+                        <a href="<?php echo $page->url(); ?>" class="btn btn-sm btn-success" target="_blank">
                             <span class="glyphicon glyphicon-eye-open"></span>
                             View
                         </a>
