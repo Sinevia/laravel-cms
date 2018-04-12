@@ -200,6 +200,11 @@ class CmsController extends \Illuminate\Routing\Controller {
         $q = $q->orderBy($orderby, $sort);
         $pages = $q->paginate($results_per_page);
 
+        foreach ($pages as $i => $page) {
+            $default_translation = $page->translation('en');
+            $pages[$i]->Title = $default_translation->Title;
+        }
+
         return view('cms::admin/page-manager', get_defined_vars());
     }
 
@@ -318,13 +323,13 @@ class CmsController extends \Illuminate\Routing\Controller {
         $parameters = request('Parameters', old('Parameters', json_decode($widget->Parameters, true)));
         $cache = request('Cache', old('Cache', $widget->Cache));
         $type = request('Type', old('Type', $widget->Type));
-        
+
         $widgetsDirectory = \Sinevia\Cms\Models\Widget::path();
-        
+
         if ($widgetsDirectory == '') {
             return back()->withErrors('Widgets directory not recognized. Is it set in the CMS configuration settings?');
         }
-        
+
         if (is_dir($widgetsDirectory) == false) {
             return back()->withErrors('Widgets directory does not exist. Is it a valid directory set in the CMS configuration settings?');
         }
@@ -1053,5 +1058,3 @@ class CmsController extends \Illuminate\Routing\Controller {
     }
 
 }
-
-?>
