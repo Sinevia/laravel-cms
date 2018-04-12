@@ -131,14 +131,14 @@
             <?php foreach ($pages as $page) { ?>
                 <tr>
                     <td>
-                        <div style="color:#333;font-size: 14px;">
+                        <div style="color:#333;font-size: 14px;font-weight:bold;">
                             <?php echo $page->Title; ?>
                         </div>                        
-                        <div style="color:#333;font-size: 14px;">
+                        <div style="color:#333;font-size: 12px;font-style:italic;">
                             <?php echo $page->Alias; ?>
                         </div>
                         <div style="color:#999;font-size: 10px;">
-                            <?php echo $page->Id; ?>
+                            ref. <?php echo $page->Id; ?>
                         </div>
                     <td style="text-align:center;vertical-align: middle;">
                         <?php echo $page['Status']; ?><br>
