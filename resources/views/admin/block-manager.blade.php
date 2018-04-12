@@ -7,6 +7,10 @@
 @section('webpage_header')
 <h1>
     Block Manager
+    <button type="button" class="btn btn-primary pull-right" onclick="showBlockCreateModal();">
+        <span class="glyphicon glyphicon-plus-sign"></span>
+        Add Block
+    </button>
 </h1>
 <ol class="breadcrumb">
     <li><a href="<?php echo \Sinevia\Cms\Helpers\Links::adminHome() ?>"><i class="fa fa-dashboard"></i> Home</a></li>
