@@ -78,3 +78,7 @@ function viewInTemplate($pageTitle, $pageContent) {
 $html = view('guest/auth/login', get_defined_vars())->render();
 return viewInTemplate('Login', $pageContent)
 ```
+
+## Screenshots
+
+![Alt text](screenshots/001_PageManager.png?raw=true "Page Manager")
