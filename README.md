@@ -35,13 +35,14 @@ composer remove sinevia/laravel-cms
 
 Optionally, delete the CMS tables (all which start with the snv_cms_ prefix)
 
-# Configuration Settings
+## Configuration
+
 After running the vendor:publish command, the CMS settings will be published in the /config/cms.php config file. Check these out, and modify according to your taste
 
 
-## Usage ##
+## Route Settings ##
 
-1. CMS Endpoint (public)
+1. CMS Endpoint (public, catch all)
 
 ```php
 Route::group(['prefix' => '/'], function () {
@@ -58,6 +59,26 @@ Route::group(['prefix' => '/admin'], function () {
     });
 });
 ```
+
+## Templates ##
+
+The templates are layouts, that can be used to display the pages in a uniform fashion. You may have multiple templates which is useful if you want to have different "look and feel" for different sections of your website.
+
+## Pages ##
+
+The pages are the content which displays when you visit a specified URL. Each page may have an optional parent template, which can specify common elements (i.e. style sheets, scripts, etc) for all pages sharing the template.
+
+## Blocks ##
+
+The blocks are small content snippets which can be embedded into pages and templates. Useful if you want to use on multiple pages, or to make pages more lightweight.
+
+To embed in page or template use a shortcode like this: [[BLOCK_20180509052702261348]] 
+
+## Widgets ##
+
+The widgets are predefined dynamic modules which can be embedded into pages and templates (i.e. Google Maps, Contact Forms, etc). Depending on the action they perform, these may or may not have optional or requred parameters. Each widget files reside in its own directory.
+
+To embed in page or template use a shortcode like this: [[WIDGET_20180509052702261348]]
 
 ## Quick Snippets
 
