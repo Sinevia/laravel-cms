@@ -81,4 +81,16 @@ return viewInTemplate('Login', $pageContent)
 
 ## Screenshots
 
-![Alt text](screenshots/001_PageManager.png?raw=true "Page Manager")
+### 1. Page Manager
+![Alt text](screenshots/001_PageManager.png?raw=true "CMS. Page Manager")
+
+### 2. Create New Page
+![Alt text](screenshots/002_PageAddNew.png?raw=true "CMS. Create New Page")
+
+### 3. Edit Page. Content View
+![Alt text](screenshots/003_PageEdit.png?raw=true "CMS. Edit Page. Content View")
+
+### 4. Edit Page. SEO View
+![Alt text](screenshots/004_PageEdit_SeoView.png?raw=true "CMS. Edit Page. SEO View")
+
+
