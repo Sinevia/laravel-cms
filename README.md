@@ -19,6 +19,8 @@ This package allows to add a content management system as a package dependency i
 
 ```php
 composer require sinevia/laravel-cms
+php artisan migrate
+php artisan vendor:publish
 ```
 
 Word of warning. Do use a stable package, as "dev-master" is a work in progress.
@@ -32,6 +34,10 @@ composer remove sinevia/laravel-cms
 ```
 
 Optionally, delete the CMS tables (all which start with the snv_cms_ prefix)
+
+# Configuration Settings
+After running the vendor:publish command, the CMS settings will be published in the /config/cms.php config file. Check these out, and modify according to your taste
+
 
 ## Usage ##
 
