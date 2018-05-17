@@ -80,6 +80,26 @@ The widgets are predefined dynamic modules which can be embedded into pages and 
 
 To embed in page or template use a shortcode like this: [[WIDGET_20180509052702261348]]
 
+## Human Friendly Aliases ##
+The following shortcuts can be used to create human friendly page aliases, that can be used for pages with dynamic content
+
+|Shortcut | Regex |
+| ------- |-------|
+| :any    | ([^/]+) |
+| :num    | ([0-9]+) |
+| :all    | (.*) |
+| :string | ([a-zA-Z]+) |
+| :number | ([0-9]+) |
+| :alpha' | ([a-zA-Z0-9-_]+) |
+
+Example page alias: /article/:num/:string
+
+To retrieve back you may use the following snippet
+```php
+preg_match('#^/article/([0-9]+)/([a-zA-Z]+)/([a-zA-Z]+)$#', '/' . $uri, $matched);
+$articleId = $matched[1] ?? "";
+```
+
 ## Quick Snippets
 
 1. Advanced usage. Use the CMS templates to wrap around custom code with blade templates:
