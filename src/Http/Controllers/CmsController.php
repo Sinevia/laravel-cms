@@ -22,6 +22,12 @@ class CmsController extends \Illuminate\Routing\Controller {
         if ($uri == "cms") {
             $uri = $uri . '/';
         }
+        
+        $languages = array_column(\Sinevia\Cms\Helpers\Languages::$data, 0);
+
+        if (strlen(\Request::segment(1)) == 2 AND in_array(\Request::segment(1), $languages)) {
+            $uri = substr($uri, 3);
+        }
 
         $alias = str_replace_first('cms/', '', $uri);
 
