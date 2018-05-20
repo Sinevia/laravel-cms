@@ -43,8 +43,8 @@ class CmsController extends \Illuminate\Routing\Controller {
                 ':all' => '(.*)',
                 ':string' => '([a-zA-Z]+)',
                 ':number' => '([0-9]+)',
+                ':numeric'=>'([0-9-.]+)',
                 ':alpha' => '([a-zA-Z0-9-_]+)',
-                ':numeric'=>'([^0-9-.]+)',
             );
             $aliases = \Sinevia\Cms\Models\Page::pluck('Alias', 'Id')->toArray();
             $aliases = array_filter($aliases, function($alias) {
