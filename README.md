@@ -90,6 +90,7 @@ The following shortcuts can be used to create human friendly page aliases, that 
 | :all    | (.*) |
 | :string | ([a-zA-Z]+) |
 | :number | ([0-9]+) |
+| :numeric | ([0-9-.]+) |
 | :alpha' | ([a-zA-Z0-9-_]+) |
 
 Example page alias: /article/:num/:string
