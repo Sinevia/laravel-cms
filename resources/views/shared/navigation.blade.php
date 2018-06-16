@@ -30,7 +30,7 @@ $widgetCount = \Sinevia\Cms\Models\Widget::where('Status', '<>', 'Deleted')->cou
             </li>
             <li>
                 <a href="<?php echo \Sinevia\Cms\Helpers\Links::adminWidgetManager(); ?>">
-                    Widget
+                    Widgets
                     <span class="badge"><?php echo $widgetCount; ?></span>
                 </a>
             </li>
