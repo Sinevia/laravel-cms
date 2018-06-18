@@ -243,4 +243,9 @@
     <i class="glyphicon glyphicon-info-sign"></i>
     To use this widget in your website use the following shortcode [[WIDGET_<?php echo $widget->Id ?>]]
 </p>
+
+<br />
+<br />
+<br />
+
 @stop
