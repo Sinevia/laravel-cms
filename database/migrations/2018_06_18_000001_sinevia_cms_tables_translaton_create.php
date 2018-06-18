@@ -1,5 +1,5 @@
 <?php
-class SineviaCmsTablesTranslationCreate extends Illuminate\Database\Migrations\Migration {
+class SineviaCmsTablesTranslatonCreate extends Illuminate\Database\Migrations\Migration {
     /**
      * Run the migrations.
      *
