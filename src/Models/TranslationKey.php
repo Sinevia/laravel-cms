@@ -1,8 +1,8 @@
 <?php
 
-namespace \Cms;
+namespace Sinevia\Cms\Models;
 
-class TranslationKey extends \App\Models\BaseModel {
+class TranslationKey extends BaseModel {
 
     protected $table = 'snv_cms_translation_key';
     public $timestamps = false;
