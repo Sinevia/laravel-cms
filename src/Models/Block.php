@@ -19,6 +19,23 @@ class Block extends BaseModel {
         }
         return false;
     }
+    
+    public static function renderBlocks($string) {
+        preg_match_all("|\[\[BLOCK_(.*)\]\]|U", $string, $out, PREG_PATTERN_ORDER);
+        $blockIds = $out[1];
+        foreach ($blockIds as $blockId) {
+            $block = \Sinevia\Cms\Models\Block::find($blockId);
+            if ($block != null) {
+                $blockTranslation = $block->translation('en');
+                $blockContent = $blockTranslation->Content;
+            } else {
+                $blockContent = '';
+            }
+            $blockContentDynamic = \Sinevia\Cms\Helpers\Template::fromString($blockContent);
+            $string = str_replace("[[BLOCK_$blockId]]", $blockContentDynamic, $string);
+        }
+        return $string;
+    }
 
     public function restoreVersion($versionId) {
         $version = Version::find($versionId);
