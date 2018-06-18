@@ -272,6 +272,43 @@ class CmsController extends \Illuminate\Routing\Controller {
 
         return view('cms::admin/template-update', get_defined_vars());
     }
+    
+    function getTranslationManager() {
+        $view = request('view', '');
+        $filterStatus = request('filter_status', '');
+        if ($view == 'trash') {
+            $filterStatus = 'Deleted';
+        }
+        if ($filterStatus == 'Deleted') {
+            $view = 'trash';
+        }
+        $session_order_by = \Session::get('cms_page_translation_by', 'Key');
+        $session_order_sort = \Session::get('cms_page_translation_sort', 'asc');
+        $orderby = request('by', $session_order_by);
+        $sort = request('sort');
+        $page = request('page', 0);
+        $results_per_page = 20;
+        \Session::put('cms_translation_manager_by', $orderby); // Keep for session
+        \Session::put('cms_translation_manager_sort', $sort);  // Keep for session
+
+        $q = \Sinevia\Cms\Models\TranslationKey::getModel();
+
+        if ($filterStatus == "") {
+            //$q = $q->where('Status', '<>', 'Deleted');
+        }
+        if ($filterStatus != "") {
+            //$q = $q->where('Status', '=', $filterStatus);
+        }
+        $q = $q->orderBy($orderby, $sort);
+        $translationKeys = $q->paginate($results_per_page);
+
+        foreach ($translationKeys as $i => $translationKey) {
+            //$default_translation = $page->translation('en');
+            //$pages[$i]->Title = $default_translation->Title;
+        }
+
+        return view('cms::admin/translation-manager', get_defined_vars());
+    }
 
     function getWidgetManager() {
         $view = request('view', '');
