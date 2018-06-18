@@ -7,10 +7,6 @@ namespace Sinevia\Cms\Http\Controllers;
  */
 class CmsController extends \Illuminate\Routing\Controller {
 
-//    function anyIndex() {
-//        return view('knowledge::admin');
-//    }
-
     function anyIndex() {
         return $this->getPageManager();
     }
@@ -72,7 +68,7 @@ class CmsController extends \Illuminate\Routing\Controller {
         $pageMetaRobots = $page->MetaRobots;
         $pageCanonicalUrl = $page->CanonicalUrl != "" ? $page->CanonicalUrl : $page->url();
         $templateId = $page->TemplateId;
-
+        
 
         $template = \Sinevia\Cms\Models\Template::find($page->TemplateId);
 
@@ -83,11 +79,6 @@ class CmsController extends \Illuminate\Routing\Controller {
             }
             $templateContent = $templateTranslation->Content;
 
-            $pageTitle = $pageTranslation->Title;
-            $pageContent = $pageTranslation->Content;
-            //$pageMetaKeywords = $page->MetaKeywords;
-            //$pageMetaDescription = $pageTranslation->MetaDescription;
-
             $webpage = \Sinevia\Cms\Helpers\Template::fromString($templateContent, [
                         'page_meta_description' => $pageMetaDescription,
                         'page_meta_keywords' => $pageMetaKeywords,
@@ -96,32 +87,20 @@ class CmsController extends \Illuminate\Routing\Controller {
                         'page_title' => $pageTitle,
                         'page_content' => \Sinevia\Cms\Helpers\Template::fromString($pageContent),
             ]);
-
-            preg_match_all("|\[\[BLOCK_(.*)\]\]|U", $webpage, $out, PREG_PATTERN_ORDER);
-            $blockIds = $out[1];
-            foreach ($blockIds as $blockId) {
-                $block = \Sinevia\Cms\Models\Block::find($blockId);
-                if ($block != null) {
-                    $blockTranslation = $block->translation('en');
-                    $blockContent = $blockTranslation->Content;
-                } else {
-                    $blockContent = '';
-                }
-                $blockContentDynamic = \Sinevia\Cms\Helpers\Template::fromString($blockContent);
-                $webpage = str_replace("[[BLOCK_$blockId]]", $blockContentDynamic, $webpage);
-            }
-            // return $webpage;
+            
+            $webpage = \Sinevia\Cms\Models\Block::renderBlocks($webpage);
             return \Sinevia\Cms\Models\Widget::renderWidgets($webpage);
         }
-
-
-        return \Sinevia\Cms\Helpers\Template::fromString($pageContent, [
+        
+        $webpage = \Sinevia\Cms\Helpers\Template::fromString($pageContent, [
                     'page' => $page,
                     'pageTranslation' => $pageTranslation,
         ]);
+        
+        $webpage = \Sinevia\Cms\Models\Block::renderBlocks($webpage);
+        return \Sinevia\Cms\Models\Widget::renderWidgets($webpage);
 
-
-        require_once app_path('Helpers/helpers.php');
+        //require_once app_path('Helpers/helpers.php');
     }
 
     function getBlockManager() {
