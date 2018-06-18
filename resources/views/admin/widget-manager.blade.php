@@ -233,4 +233,8 @@
 </script>
 <!-- END: Widget Delete Modal Dialog -->
 
+<br />
+<br />
+<br />
+
 @stop
