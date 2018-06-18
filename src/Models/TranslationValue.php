@@ -1,6 +1,6 @@
 <?php
 
-namespace Cms;
+namespace Sinevia\Cms\Models;
 
 class TranslationValue extends BaseModel {
 
