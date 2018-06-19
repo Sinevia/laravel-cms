@@ -6,7 +6,7 @@ class TranslationValue extends BaseModel {
 
     //protected $connection = 'sinevia';
     protected $table = 'snv_cms_translation_value';
-    public $timestamps = false;
+    public $timestamps = true;
 
     public static function tableCreate() {
         $o = new self();
