@@ -18,7 +18,7 @@ class CmsController extends \Illuminate\Routing\Controller {
         if ($uri == "cms") {
             $uri = $uri . '/';
         }
-        
+
         $languages = array_column(\Sinevia\Cms\Helpers\Languages::$data, 0);
 
         if (strlen(\Request::segment(1)) == 2 AND in_array(\Request::segment(1), $languages)) {
@@ -39,7 +39,7 @@ class CmsController extends \Illuminate\Routing\Controller {
                 ':all' => '(.*)',
                 ':string' => '([a-zA-Z]+)',
                 ':number' => '([0-9]+)',
-                ':numeric'=>'([0-9-.]+)',
+                ':numeric' => '([0-9-.]+)',
                 ':alpha' => '([a-zA-Z0-9-_]+)',
             );
             $aliases = \Sinevia\Cms\Models\Page::pluck('Alias', 'Id')->toArray();
@@ -68,7 +68,7 @@ class CmsController extends \Illuminate\Routing\Controller {
         $pageMetaRobots = $page->MetaRobots;
         $pageCanonicalUrl = $page->CanonicalUrl != "" ? $page->CanonicalUrl : $page->url();
         $templateId = $page->TemplateId;
-        
+
 
         $template = \Sinevia\Cms\Models\Template::find($page->TemplateId);
 
@@ -87,16 +87,16 @@ class CmsController extends \Illuminate\Routing\Controller {
                         'page_title' => $pageTitle,
                         'page_content' => \Sinevia\Cms\Helpers\Template::fromString($pageContent),
             ]);
-            
+
             $webpage = \Sinevia\Cms\Models\Block::renderBlocks($webpage);
             return \Sinevia\Cms\Models\Widget::renderWidgets($webpage);
         }
-        
+
         $webpage = \Sinevia\Cms\Helpers\Template::fromString($pageContent, [
                     'page' => $page,
                     'pageTranslation' => $pageTranslation,
         ]);
-        
+
         $webpage = \Sinevia\Cms\Models\Block::renderBlocks($webpage);
         return \Sinevia\Cms\Models\Widget::renderWidgets($webpage);
 
@@ -272,7 +272,7 @@ class CmsController extends \Illuminate\Routing\Controller {
 
         return view('cms::admin/template-update', get_defined_vars());
     }
-    
+
     function getTranslationManager() {
         $view = request('view', '');
         $filterStatus = request('filter_status', '');
@@ -308,6 +308,21 @@ class CmsController extends \Illuminate\Routing\Controller {
         }
 
         return view('cms::admin/translation-manager', get_defined_vars());
+    }
+
+    function getTranslationUpdate() {
+        $translationKey = \Sinevia\Cms\Models\TranslationKey::find(request('TranslationId'));
+
+        if ($translationKey == null) {
+            return redirect()->back()->withErrors('Translation not found');
+        }
+
+        $translationValues = \Sinevia\Cms\Models\TranslationValue::where('KeyId', $translationKey->Id)->get();
+        $defaultValue = \Sinevia\Cms\Models\TranslationValue::where('KeyId', $translationKey->Id)->where('Language', 'en')->first();
+
+        $key = request('Key', old('Key', $translationKey->Key));
+
+        return view('cms::admin/translation-update', get_defined_vars());
     }
 
     function getWidgetManager() {
@@ -993,6 +1008,189 @@ class CmsController extends \Illuminate\Routing\Controller {
         }
 
         return redirect()->back()->withErrors('Saving the template FAILED...')->withInput();
+    }
+
+    function postTranslationCreate() {
+        $rules = array(
+            'Key' => 'required', // required
+        );
+
+        $validator = \Validator::make(\Request::all(), $rules);
+        if ($validator->fails()) {
+            return \Redirect::back()->withErrors($validator)->withInput(\Request::all());
+        }
+
+        $key = request('Key', '');
+
+        \DB::beginTransaction();
+        try {
+            $translationKey = new \Sinevia\Cms\Models\TranslationKey;
+            $translationKey->Key = $key;
+
+            $result = $translationKey->save();
+
+
+            $translationValue = new \Sinevia\Cms\Models\TranslationValue;
+            $translationValue->KeyId = $translationKey->Id;
+            $translationValue->Language = 'en';
+            $translationValue->Value = '';
+            $translationValue->save();
+
+            if ($result == false) {
+                return \Redirect::back()->withErrors('Translation failed to be saved.')->withInput(\Request::all());
+            }
+
+            \DB::commit();
+
+            return \Redirect::back()->withSuccess('Translation successfully saved.');
+        } catch (Exception $e) {
+            \DB::rollback();
+            $error = "Translation failed to be created";
+            return \Redirect::back()->withErrors($error)->withInput(\Request::all());
+        }
+    }
+
+    function postTranslationDelete() {
+        $translationKey = \Sinevia\Cms\Models\TranslationKey::find(request('TranslationId'));
+        if ($translationKey == null) {
+            return \Redirect::back()->withErrors('Translation not found');
+        }
+        \DB::beginTransaction();
+        try {
+            \Sinevia\Cms\Models\TranslationValue::where('KeyId', $translationKey->Id)->delete();
+            $translationKey->delete();
+
+            \DB::commit();
+            return redirect()->back();
+        } catch (Exception $e) {
+            \DB::rollback();
+            $error = "Translation COULD NOT be deleted";
+            return \Redirect::back()->withErrors($error);
+        }
+    }
+
+    function postTranslationUpdate() {
+        $translationKey = \Sinevia\Cms\Models\TranslationKey::find(request('TranslationId'));
+        if ($translationKey == null) {
+            return \Redirect::back()->withErrors('Translation not found');
+        }
+        $rules = array(
+            'Key' => 'required', // required
+        );
+
+        $validator = \Validator::make(\Request::all(), $rules);
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        $action = request('action', '');
+        $content = request('Content', []); // Values content
+        $key = request('Key', $translationKey->Key);
+        $translationValues = \Sinevia\Cms\Models\TranslationValue::where('KeyId', $translationKey->Id)->get();
+
+        \DB::beginTransaction();
+        try {
+            $translationKey->Key = $key;
+            $translationKey->save();
+
+            foreach ($translationValues as $tr) {
+                $language = $tr['Language'];
+                $tr->Value = $content[$language];
+                $tr->save();
+            }
+
+            $result = \DB::commit();
+
+            if ($result !== false) {
+                if ($action === 'save') {
+                    \Session::flash('success', 'You successuly updated the translation');
+                    return redirect()->back();
+                }
+                \Session::flash('success', 'You successuly updated the translation');
+                return redirect(\Sinevia\Cms\Helpers\Links::adminTranslationManager());
+            }
+        } catch (Exception $e) {
+            \DB::rollback();
+        }
+
+        return redirect()->back()->withErrors('Saving the translation FAILED...')->withInput();
+    }
+
+    function postTranslationValueCreate() {
+        $rules = array(
+            'KeyId' => 'required', // required
+            'Language' => 'required', // required
+        );
+
+        $validator = \Validator::make(\Request::all(), $rules);
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+        
+        /* START: Data */
+        $keyId = request('KeyId', '');
+        $language = request('Language', '');
+        $language_name = \Sinevia\Cms\Helpers\Languages::getLanguageByIso1($language);
+        /* END: Data */
+
+        $translationKey = \Sinevia\Cms\Models\TranslationKey::find($keyId);
+
+        if ($translationKey == null) {
+            return redirect()->back()->withErrors('Translation with ID ' . $keyId . ' DOES NOT exist');
+        }
+
+        $translationValue = \App\Models\Cms\TranslationValue::where('KeyId', $keyId)->where('Language', $language)->first();
+
+        if ($translationValue != null) {
+            return \Redirect::back()->withErrors($language_name . ' translation already exists');
+        }
+        
+        $translationValue = new \Sinevia\Cms\Models\TranslationValue();
+        $translationValue->KeyId = $keyId;
+        $translationValue->Language = $language;
+        $translationValue->Value = '';
+
+        if ($translationValue->save()) {
+            return \Redirect::back()->with('success', 'Your successuly created ' . $language_name . ' translation.');
+        }
+
+        return \Redirect::back()->withErrors($language_name . ' translation FAILED to be created.');
+    }
+
+    function postTranslationValueDelete() {
+        $rules = array(
+            'KeyId' => 'required', // required
+            'Language' => 'required', // required
+        );
+
+        $validator = \Validator::make(\Request::all(), $rules);
+        if ($validator->fails()) {
+            return \Redirect::back()->withErrors($validator)->withInput(\Request::all());
+        }
+        
+        /* START: Data */
+        $keyId = request('KeyId', '');
+        $language = request('Language', '');
+        $language_name = \Sinevia\Cms\Helpers\Languages::getLanguageByIso1($language);
+        /* END: Data */
+        
+        $translationKey = \Sinevia\Cms\Models\TranslationKey::find($keyId);
+
+        if ($translationKey == null) {
+            return redirect()->back()->withErrors('Translation with ID ' . $keyId . ' DOES NOT exist');
+        }
+
+        $translationValue = \App\Models\Cms\TranslationValue::where('KeyId', $keyId)->where('Language', $language)->first();
+
+        if ($language == 'en') {
+            return \Redirect::back()->withErrors('English is default translation and cannot be removed');
+        }
+
+        if ($translationValue->delete()) {
+            return \Redirect::back()->with('success', 'Your successuly deleted ' . $language_name . ' translation.');
+        }
+
+        return \Redirect::back()->withErrors($language_name . ' translation FAILED to be deleted.');
     }
 
     function postWidgetCreate() {
