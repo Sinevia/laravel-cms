@@ -5,7 +5,7 @@ namespace Sinevia\Cms\Models;
 class TranslationKey extends BaseModel {
 
     protected $table = 'snv_cms_translation_key';
-    public $timestamps = false;
+    public $timestamps = true;
 
     public static function translate($key, $language = 'en') {
         $translationKey = self::where('Key', $key)->first();
