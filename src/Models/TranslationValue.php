@@ -16,7 +16,7 @@ class TranslationValue extends BaseModel {
                 $table->engine = 'InnoDB';
                 $table->string($o->primaryKey, 40)->primary();
                 $table->string('KeyId', 40)->index();
-                $table->string('Language', 2)->index();
+                $table->string('Laguage', 2)->index();
                 $table->text('Value')->nullable()->default(null);
                 $table->datetime('CreatedAt')->nullable()->default(null);
                 $table->datetime('UpdatedAt')->nullable()->default(null);
