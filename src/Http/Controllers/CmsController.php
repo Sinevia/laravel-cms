@@ -1139,7 +1139,7 @@ class CmsController extends \Illuminate\Routing\Controller {
             return redirect()->back()->withErrors('Translation with ID ' . $keyId . ' DOES NOT exist');
         }
 
-        $translationValue = \App\Models\Cms\TranslationValue::where('KeyId', $keyId)->where('Language', $language)->first();
+        $translationValue = \Sinevia\Cms\Models\TranslationValue::where('KeyId', $keyId)->where('Language', $language)->first();
 
         if ($translationValue != null) {
             return \Redirect::back()->withErrors($language_name . ' translation already exists');
@@ -1180,7 +1180,7 @@ class CmsController extends \Illuminate\Routing\Controller {
             return redirect()->back()->withErrors('Translation with ID ' . $keyId . ' DOES NOT exist');
         }
 
-        $translationValue = \App\Models\Cms\TranslationValue::where('KeyId', $keyId)->where('Language', $language)->first();
+        $translationValue = \Sinevia\Cms\Models\TranslationValue::where('KeyId', $keyId)->where('Language', $language)->first();
 
         if ($language == 'en') {
             return \Redirect::back()->withErrors('English is default translation and cannot be removed');
