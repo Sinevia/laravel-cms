@@ -2,6 +2,7 @@
 $blockCount = \Sinevia\Cms\Models\Block::where('Status', '<>', 'Deleted')->count();
 $pageCount = \Sinevia\Cms\Models\Page::where('Status', '<>', 'Deleted')->count();
 $templateCount = \Sinevia\Cms\Models\Template::where('Status', '<>', 'Deleted')->count();
+$translationCount = \Sinevia\Cms\Models\TranslationValue::count();
 $widgetCount = \Sinevia\Cms\Models\Widget::where('Status', '<>', 'Deleted')->count();
 ?>
 <div class="panel panel-default">
@@ -32,6 +33,12 @@ $widgetCount = \Sinevia\Cms\Models\Widget::where('Status', '<>', 'Deleted')->cou
                 <a href="<?php echo \Sinevia\Cms\Helpers\Links::adminWidgetManager(); ?>">
                     Widgets
                     <span class="badge"><?php echo $widgetCount; ?></span>
+                </a>
+            </li>
+            <li>
+                <a href="<?php echo \Sinevia\Cms\Helpers\Links::adminTranslationManager(); ?>">
+                    Translations
+                    <span class="badge"><?php echo $translationCount; ?></span>
                 </a>
             </li>
             <li>
