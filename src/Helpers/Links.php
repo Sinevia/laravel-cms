@@ -100,8 +100,28 @@ class Links {
         return action('\Sinevia\Cms\Http\Controllers\CmsController@postTemplateTranslationDelete') . self::buildQueryString($queryData);
     }
 
+    public static function adminTranslationCreate($queryData = []) {
+        return action('\Sinevia\Cms\Http\Controllers\CmsController@postTranslationCreate') . self::buildQueryString($queryData);
+    }
+
+    public static function adminTranslationDelete($queryData = []) {
+        return action('\Sinevia\Cms\Http\Controllers\CmsController@postTranslationDelete') . self::buildQueryString($queryData);
+    }
+
     public static function adminTranslationManager($queryData = []) {
         return action('\Sinevia\Cms\Http\Controllers\CmsController@getTranslationManager') . self::buildQueryString($queryData);
+    }
+
+    public static function adminTranslationUpdate($queryData = []) {
+        return action('\Sinevia\Cms\Http\Controllers\CmsController@getTranslationUpdate') . self::buildQueryString($queryData);
+    }
+    
+    public static function adminTranslationValueCreate($queryData = []) {
+        return action('\Sinevia\Cms\Http\Controllers\CmsController@postTranslationValueCreate') . self::buildQueryString($queryData);
+    }
+    
+    public static function adminTranslationValueDelete($queryData = []) {
+        return action('\Sinevia\Cms\Http\Controllers\CmsController@postTranslationValueDelete') . self::buildQueryString($queryData);
     }
 
     public static function adminWidgetManager($queryData = []) {
