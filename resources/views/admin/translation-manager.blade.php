@@ -6,7 +6,7 @@
 
 @section('webpage_header')
 <h1>
-    Page Manager
+    Translation Manager
     <button type="button" class="btn btn-primary pull-right" onclick="showTranslationCreateModal();">
         <span class="glyphicon glyphicon-plus-sign"></span>
         Add Translation
@@ -14,8 +14,8 @@
 </h1>
 <ol class="breadcrumb">
     <li><a href="<?php echo \Sinevia\Cms\Helpers\Links::adminHome(); ?>"><i class="fa fa-dashboard"></i> Home</a></li>
-    <li><a href="<?php echo \Sinevia\Cms\Helpers\Links::adminPageManager(); ?>">CMS</a></li>
-    <li class="active"><a href="<?php echo \Sinevia\Cms\Helpers\Links::adminPageManager(); ?>">Translations</a></li>
+    <li><a href="<?php echo \Sinevia\Cms\Helpers\Links::adminTranslationManager(); ?>">CMS</a></li>
+    <li class="active"><a href="<?php echo \Sinevia\Cms\Helpers\Links::adminTranslationManager(); ?>">Translations</a></li>
 </ol>
 @stop
 
@@ -46,9 +46,9 @@
                     <span class="glyphicon glyphicon-search"></span>
                 </button>
 
-                <button type="button" class="btn btn-primary pull-right" onclick="showPageCreateModal();">
+                <button type="button" class="btn btn-primary pull-right" onclick="showTranslationCreateModal();">
                     <span class="glyphicon glyphicon-plus-sign"></span>
-                    Add Page
+                    Add Translation
                 </button>
             </form>
         </div>
@@ -86,18 +86,9 @@
         <table id="table_articles" class="table table-striped">
             <tr>
                 <th style="text-align:center;">
-                    <a href="?cmd=pages-manager&amp;by=Title&amp;sort=<?php if ($sort == 'asc') { ?>desc<?php } else { ?>asc<?php } ?>">
-                        Title&nbsp;<?php
+                    <a href="?cmd=pages-manager&amp;by=Key&amp;sort=<?php if ($sort == 'asc') { ?>desc<?php } else { ?>asc<?php } ?>">
+                        Translation Key&nbsp;<?php
                         if ($orderby === 'Title') {
-                            if ($sort == 'asc') {
-                                ?>&#8595;<?php } else { ?>&#8593;<?php
-                            }
-                        }
-                        ?>
-                    </a>,
-                    <a href="?cmd=pages-manager&amp;by=Alias&amp;sort=<?php if ($sort == 'asc') { ?>desc<?php } else { ?>asc<?php } ?>">
-                        Alias&nbsp;<?php
-                        if ($orderby === 'Alias') {
                             if ($sort == 'asc') {
                                 ?>&#8595;<?php } else { ?>&#8593;<?php
                             }
@@ -115,8 +106,8 @@
                     </a>
                 </th>
                 <th style="text-align:center;width:100px;">
-                    <a href="?cmd=pages-manager&amp;by=Status&amp;sort=<?php if ($sort == 'asc') { ?>desc<?php } else { ?>asc<?php } ?>">
-                        Status&nbsp;<?php
+                    <a href="?cmd=pages-manager&amp;by=UpdatedAt&amp;sort=<?php if ($sort == 'asc') { ?>desc<?php } else { ?>asc<?php } ?>">
+                        Modified&nbsp;<?php
                         if ($orderby === 'Status') {
                             if ($sort == 'asc') {
                                 ?>&#8595;<?php } else { ?>&#8593;<?php
@@ -131,40 +122,32 @@
             <?php foreach ($translationKeys as $translationKey) { ?>
                 <?php
                 $key = $translationKey->Key;
-                $updatedAt = $translationKey->UpdatedAt;
+                $updatedAt = date('d M Y',strtotime($translationKey->UpdatedAt));
+                $idLanguage = Sinevia\Cms\Models\TranslationValue::where('KeyId',$translationKey->Id)->get(['Language'])->toArray();
+                $languages = array_column($idLanguage, 'Language');
                 ?>
                 <tr>
                     <td>
                         <div style="color:#333;font-size: 14px;font-weight:bold;">
                             <?php echo htmlentities($key); ?>
                         </div>
+                        <div style="color:#333;font-size: 11px;">
+                            Translations <?php echo count($languages); ?>: <?php echo htmlentities(implode(', ', $languages)); ?>
+                        </div>
                     </td>
-                    <td style="text-align:center;vertical-align: middle;">
+                    <td style="text-align:center;vertical-align: middle;font-size: 12px;">
                         <?php echo $updatedAt; ?><br>
                     </td>
                     <td style="text-align:center;vertical-align: middle;">
-                        <a href="<?php echo $page->url(); ?>" class="btn btn-sm btn-success" target="_blank">
-                            <span class="glyphicon glyphicon-eye-open"></span>
-                            View
-                        </a>
-                        <a href="<?php echo \Sinevia\Cms\Helpers\Links::adminPageUpdate(['PageId' => $page['Id']]); ?>" class="btn btn-sm btn-warning">
+                        <a class="btn btn-xs btn-warning" href="<?php echo \Sinevia\Cms\Helpers\Links::adminTranslationUpdate(['TranslationId' => $translationKey['Id']]); ?>">
                             <span class="glyphicon glyphicon-edit"></span>
                             Edit
                         </a>
 
-                        <?php if ($page->Status == 'Deleted') { ?>
-                            <button class="btn btn-sm btn-danger" onclick="confirmPageDelete('<?php echo $page->Id; ?>');">
-                                <span class="glyphicon glyphicon-remove-sign"></span>
-                                Delete
-                            </button>
-                        <?php } ?>
-
-                        <?php if ($page->Status != 'Deleted') { ?>
-                            <button class="btn btn-sm btn-danger" onclick="confirmPageMoveToTrash('<?php echo $page->Id; ?>');">
-                                <span class="glyphicon glyphicon-trash"></span>
-                                Trash
-                            </button>
-                        <?php } ?>
+                        <button class="btn btn-xs btn-danger" onclick="confirmTranslationDelete('<?php echo $translationKey->Id; ?>');">
+                            <span class="glyphicon glyphicon-remove-sign"></span>
+                            Delete
+                        </button>
                     </td>
                 </tr>
             <?php } ?>
@@ -177,6 +160,88 @@
     </div>
 
 </div>
+
+
+<!-- START: Translation Create Modal Dialog -->
+<div class="modal fade" id="ModalTranslationCreate">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">×</button>
+                <h3>New Translation</h3>
+            </div>
+            <div class="modal-body">
+                <form name="FormTranslationCreate" method="post" action="<?php echo \Sinevia\Cms\Helpers\Links::adminTranslationCreate(); ?>">
+                    <div class="form-group">
+                        <label>Key</label>
+                        <input name="Key" value="" class="form-control" />
+                    </div>
+                    <?php echo csrf_field(); ?>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <a id="modal-close" href="#" class="btn btn-info pull-left" data-dismiss="modal">
+                    <span class="glyphicon glyphicon-chevron-left"></span>
+                    Cancel
+                </a>
+                <a id="modal-close" href="#" class="btn btn-success" data-dismiss="modal" onclick="FormTranslationCreate.submit();">
+                    <span class="glyphicon glyphicon-ok-circle"></span>
+                    Create translation
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function showTranslationCreateModal() {
+        $('#ModalTranslationCreate').modal('show');
+    }
+</script>
+<!-- END: Translation Create Modal Dialog -->
+
+
+<!-- START: Translation Delete Modal Dialog -->
+<div class="modal fade" id="ModalTranslationDelete">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">×</button>
+                <h3>Confirm Translation Delete</h3>
+            </div>
+            <div class="modal-body">
+                <div>
+                    Are you sure you want to delete this template?
+                </div>
+                <div>
+                    Note! This action cannot be undone.
+                </div>
+
+                <form name="FormTranslationDelete" method="post" action="<?php echo \Sinevia\Cms\Helpers\Links::adminTranslationDelete(); ?>">
+                    <input type="hidden" id="template_delete_id" name="TranslationId" value="">
+                    <?php echo csrf_field(); ?>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <a id="modal-close" href="#" class="btn btn-info pull-left" data-dismiss="modal">
+                    <span class="glyphicon glyphicon-chevron-left"></span>
+                    Cancel
+                </a>
+                <a id="modal-close" href="#" class="btn btn-danger" data-dismiss="modal" onclick="FormTranslationDelete.submit();">
+                    <span class="glyphicon glyphicon-remove-sign"></span>
+                    Delete
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function confirmTranslationDelete(template_id) {
+        $('#ModalTranslationDelete input[name=TranslationId]').val(template_id);
+        $('#ModalTranslationDelete').modal('show');
+    }
+</script>
+<!-- END: Translation Delete Modal Dialog -->
+
 
 
 @stop
