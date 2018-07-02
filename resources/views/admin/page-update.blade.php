@@ -123,6 +123,26 @@
                             });
                         </script>
                     <?php } ?>
+                    <?php if ($wysiwyg == 'Summernote') { ?>
+                        <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.css" rel="stylesheet" />
+                        <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.js"></script>
+                        <script>
+                            $(document).ready(function () {
+                                $('.page_content').summernote();
+                            });
+                        </script>
+                    <?php } ?>
+                    <?php if ($wysiwyg == 'CKEditor') { ?>
+                        CKEditorCKEditorCKEditorCKEditorCKEditorCKEditor
+                        <script src="https://cdn.ckeditor.com/ckeditor5/10.1.0/classic/ckeditor.js"></script>
+                        <script>
+                            ClassicEditor
+                                    .create(document.querySelectorAll('.page_content'))
+                                    .catch(error => {
+                                        console.error(error);
+                                    });
+                        </script>
+                    <?php } ?>
                     <?php if ($wysiwyg == 'TinyMCE') { ?>
                         <script src="//tinymce.cachefly.net/4.0/tinymce.min.js"></script>
                         <script>
@@ -381,6 +401,10 @@
                             <option value="None" <?php echo $selected ?> >None</option>                            
                             <?php $selected = ($wysiwyg == 'CodeMirror') ? 'selected="selected"' : ''; ?>
                             <option value="CodeMirror" <?php echo $selected ?> >CodeMirror - Syntax Highlihter (recommended)</option>
+                            <?php $selected = ($wysiwyg == 'Summernote') ? 'selected="selected"' : ''; ?>
+                            <option value="Summernote" <?php echo $selected ?> >Summernote - Wysiwyg (not recommended)</option>
+                            <?php $selected = ($wysiwyg == 'CKEditor') ? 'selected="selected"' : ''; ?>
+                            <option value="CKEditor" <?php echo $selected ?> >CKEditor - Wysiwyg (not recommended)</option>                            
                             <?php $selected = ($wysiwyg == 'TinyMCE') ? 'selected="selected"' : ''; ?>
                             <option value="TinyMCE" <?php echo $selected ?> >TinyMCE - Wysiwyg (not recommended)</option>
                             <!--
