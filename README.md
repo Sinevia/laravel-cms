@@ -46,7 +46,12 @@ After running the vendor:publish command, the CMS settings will be published in 
 
 ```php
 Route::group(['prefix' => '/'], function () {
+    // will match only one level deep
     Route::any('/{path?}', '\Sinevia\Cms\Http\Controllers\CmsController@anyPageView');
+    
+    // or use with regex expression to match any level
+    Route::any('/{path?}', '\Sinevia\Cms\Http\Controllers\CmsController@anyPageView')
+        ->where('path', '([a-zA-z0-9\/\-]++)');
 });
 ```
 
