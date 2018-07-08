@@ -140,7 +140,7 @@ return viewInTemplate('Login', $pageContent)
 ### 4. Edit Page. SEO View
 ![Alt text](screenshots/004_PageEdit_SeoView.png?raw=true "CMS. Edit Page. SEO View")
 
-### 5. Speed Test
+### 5. Speed Test (before additional speed improvements)
 ![Alt text](screenshots/005_SpeedTest.png?raw=true "CMS. Speed Test")
 
 
