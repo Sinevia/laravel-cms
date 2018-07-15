@@ -69,8 +69,8 @@ class Page extends BaseModel {
                     $table->engine = 'InnoDB';
                     $table->string($o->primaryKey, 40)->primary();
                     $table->enum('Status', ['Draft', 'Published', 'Unpublished', 'Deleted'])->default('Draft');
-                    $table->string('TemplateId', 40)->default('');
-                    $table->string('Alias', 255)->default('');
+                    $table->string('TemplateId', 40)->nullable()->default('');
+                    $table->string('Alias', 255)->nullable()->default('');
                     $table->string('Access', 20)->default('Public');
                     $table->string('MetaKeywords', 255)->nullable()->default('');
                     $table->string('MetaDescription', 255)->nullable()->default('');
