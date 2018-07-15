@@ -72,10 +72,10 @@ class Page extends BaseModel {
                     $table->string('TemplateId', 40)->default('');
                     $table->string('Alias', 255)->default('');
                     $table->string('Access', 20)->default('Public');
-                    $table->string('MetaKeywords', 255)->default('');
-                    $table->string('MetaDescription', 255)->default('');
-                    $table->string('MetaRobots', 40)->default('');
-                    $table->string('CanonicalUrl', 255)->default('');
+                    $table->string('MetaKeywords', 255)->nullable()->default('');
+                    $table->string('MetaDescription', 255)->nullable()->default('');
+                    $table->string('MetaRobots', 40)->nullable()->default('');
+                    $table->string('CanonicalUrl', 255)->nullable()->default('');
                     $table->string('Wysiwyg', 20)->default('None');
                     $table->datetime('CreatedAt')->nullable()->default(NULL);
                     $table->datetime('UpdatedAt')->nullable()->default(NULL);
