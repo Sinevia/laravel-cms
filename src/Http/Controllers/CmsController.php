@@ -172,7 +172,10 @@ class CmsController extends \Illuminate\Routing\Controller {
         \Session::put('cms_page_manager_by', $orderby); // Keep for session
         \Session::put('cms_page_manager_sort', $sort);  // Keep for session
 
+        $tt = (new \Sinevia\Cms\Models\PageTranslation)->getTableName();
+        $pt = (new \Sinevia\Cms\Models\Page)->getTableName();
         $q = \Sinevia\Cms\Models\Page::getModel();
+        $q = $q->leftJoin($tt, $pt . '.Id', '=', $tt . '.PageId');
 
         if ($filterStatus == "") {
             $q = $q->where('Status', '<>', 'Deleted');
@@ -180,11 +183,9 @@ class CmsController extends \Illuminate\Routing\Controller {
         if ($filterStatus != "") {
             $q = $q->where('Status', '=', $filterStatus);
         }
-        if ($orderby == "Title") {
-            $orderby = 'Id';
-        }
         $q = $q->orderBy($orderby, $sort);
-        $pages = $q->paginate($results_per_page);
+        $pages = $q->select($pt.'.*', $tt.'.Title')
+                ->paginate($results_per_page);
 
         foreach ($pages as $i => $page) {
             $default_translation = $page->translation('en');
