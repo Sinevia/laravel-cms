@@ -17,6 +17,13 @@ This package allows to add a content management system as a package dependency i
 
 ## Installation (est. 5-10 mins) ##
 
+- Install required library
+
+```php
+composer require lesichkovm/laravel-advanced-model
+```
+
+- Install the CMS
 ```php
 composer require sinevia/laravel-cms
 php artisan migrate
