@@ -157,13 +157,16 @@ class CmsController extends \Illuminate\Routing\Controller {
     function getPageManager() {
         $view = request('view', '');
         $filterStatus = request('filter_status', '');
+        $filterSearch = request('filter_search', '');
+
         if ($view == 'trash') {
             $filterStatus = 'Deleted';
         }
         if ($filterStatus == 'Deleted') {
             $view = 'trash';
         }
-        $session_order_by = \Session::get('cms_page_manager_by', 'Id');
+
+        $session_order_by = \Session::get('cms_page_manager_by', 'Title');
         $session_order_sort = \Session::get('cms_page_manager_sort', 'asc');
         $orderby = request('by', $session_order_by);
         $sort = request('sort');
@@ -183,8 +186,12 @@ class CmsController extends \Illuminate\Routing\Controller {
         if ($filterStatus != "") {
             $q = $q->where('Status', '=', $filterStatus);
         }
+        if ($filterSearch != "") {
+            $q = $q->where('Title', 'LIKE', '%' . $filterSearch . '%');
+        }
+
         $q = $q->orderBy($orderby, $sort);
-        $pages = $q->select($pt.'.*', $tt.'.Title')
+        $pages = $q->select($pt . '.*', $tt . '.Title')
                 ->paginate($results_per_page);
 
         foreach ($pages as $i => $page) {
@@ -1127,7 +1134,7 @@ class CmsController extends \Illuminate\Routing\Controller {
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
-        
+
         /* START: Data */
         $keyId = request('KeyId', '');
         $language = request('Language', '');
@@ -1145,7 +1152,7 @@ class CmsController extends \Illuminate\Routing\Controller {
         if ($translationValue != null) {
             return \Redirect::back()->withErrors($language_name . ' translation already exists');
         }
-        
+
         $translationValue = new \Sinevia\Cms\Models\TranslationValue();
         $translationValue->KeyId = $keyId;
         $translationValue->Language = $language;
@@ -1168,13 +1175,13 @@ class CmsController extends \Illuminate\Routing\Controller {
         if ($validator->fails()) {
             return \Redirect::back()->withErrors($validator)->withInput(\Request::all());
         }
-        
+
         /* START: Data */
         $keyId = request('KeyId', '');
         $language = request('Language', '');
         $language_name = \Sinevia\Cms\Helpers\Languages::getLanguageByIso1($language);
         /* END: Data */
-        
+
         $translationKey = \Sinevia\Cms\Models\TranslationKey::find($keyId);
 
         if ($translationKey == null) {
