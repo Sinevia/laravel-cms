@@ -20,6 +20,7 @@ This package allows to add a content management system as a package dependency i
 - Install required library
 
 ```php
+composer require lesichkovm/laravel-advanced-route
 composer require lesichkovm/laravel-advanced-model
 ```
 
