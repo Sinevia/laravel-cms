@@ -29,6 +29,7 @@
         <div class="well hidden-sm hidden-xs">
             <form class="form-inline" name="form_filter" method="get" style="margin:0px;">
                 Filter:
+                &nbsp;
                 <div class="form-group">
                     <label class="sr-only">Status</label>
                     <select id="filter_status" name="filter_status" class="form-control" onchange="form_filter.submit();">
@@ -40,6 +41,10 @@
                         <?php $selected = ($filterStatus != 'Unpublished') ? '' : ' selected="selected"'; ?>
                         <option value="Unpublished" <?php echo $selected; ?>>Unpublished</option>
                     </select>
+                </div>
+                &nbsp;
+                <div class="form-group">
+                    <input id="filter_search" name="filter_search" class="form-control" value="{{$filterSearch}}" />
                 </div>
 
                 <button class="btn btn-primary">
