@@ -56,7 +56,7 @@ class Widget extends BaseModel {
                     $table->engine = 'InnoDB';
                     $table->string($o->primaryKey, 40)->primary();
                     $table->enum('Status', ['Draft', 'Published', 'Unpublished', 'Deleted'])->default('Draft');
-                    $table->string('Type', 20)->nullable()->default(NULL);;
+                    $table->string('Type', 40)->nullable()->default(NULL);;
                     $table->string('Title', 255);
                     $table->integer('Cache')->nullable()->default(NULL);
                     $table->text('Parameters')->nullable()->default(NULL);
