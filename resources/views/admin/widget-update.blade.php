@@ -241,7 +241,14 @@
 
 <p class="text-info">
     <i class="glyphicon glyphicon-info-sign"></i>
-    To use this widget in your website use the following shortcode [[WIDGET_<?php echo $widget->Id ?>]]
+    To use this widget in your website use the following shortcode:
+    <code>
+        <pre>
+    &lt;!-- START: Widget: <?php echo $widget->Title; ?> -->
+    [[WIDGET_<?php echo $widget->Id ?>]]
+    &lt;!-- START: Widget: <?php echo $widget->Title; ?> -->
+        </pre>
+    </code>
 </p>
 
 <br />
