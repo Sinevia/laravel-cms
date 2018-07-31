@@ -156,7 +156,14 @@
         
         <p class="text-info">
             <i class="glyphicon glyphicon-info-sign"></i>
-            To use this block in your website use the following shortcode [[BLOCK_<?php echo $block->Id ?>]]
+            To use this block in your website use the following shortcode:
+            <code>
+                <pre>
+&lt;!-- START: Block: <?php echo $block->Title; ?> -->
+[[BLOCK_<?php echo $block->Id ?>]]
+&lt;!-- END: Block: <?php echo $block->Title; ?> -->
+                </pre>
+            </code>  
         </p>
 
     </div>
