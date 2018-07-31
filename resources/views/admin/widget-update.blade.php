@@ -246,7 +246,7 @@
         <pre>
     &lt;!-- START: Widget: <?php echo $widget->Title; ?> -->
     [[WIDGET_<?php echo $widget->Id ?>]]
-    &lt;!-- START: Widget: <?php echo $widget->Title; ?> -->
+    &lt;!-- END: Widget: <?php echo $widget->Title; ?> -->
         </pre>
     </code>
 </p>
