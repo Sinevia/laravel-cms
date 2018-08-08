@@ -1,5 +1,13 @@
 # Laravel CMS #
 
+[![Total Downloads](https://poser.pugx.org/sinevia/laravel-cms/downloads)](https://packagist.org/packages/sinevia/laravel-cms)
+[![Latest Stable Version](https://poser.pugx.org/sinevia/laravel-cms/v/stable)](https://packagist.org/packages/sinevia/laravel-cms)
+[![Latest Unstable Version](https://poser.pugx.org/sinevia/laravel-cms/v/unstable)](https://packagist.org/packages/sinevia/laravel-cms)
+[![License](https://poser.pugx.org/sinevia/laravel-cms/license)](https://packagist.org/packages/sinevia/laravel-cms)
+[![Monthly Downloads](https://poser.pugx.org/sinevia/laravel-cms/d/monthly)](https://packagist.org/packages/sinevia/laravel-cms)
+[![Daily Downloads](https://poser.pugx.org/sinevia/laravel-cms/d/daily)](https://packagist.org/packages/sinevia/laravel-cms)
+[![composer.lock](https://poser.pugx.org/sinevia/laravel-cms/composerlock)](https://packagist.org/packages/sinevia/laravel-cms)
+
 A "plug-and-play" content managing system (CMS) for Laravel that does its job and stays out of your way.
 
 ## Introduction ##
