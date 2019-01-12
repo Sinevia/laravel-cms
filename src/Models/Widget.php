@@ -55,9 +55,11 @@ class Widget extends BaseModel {
         return \Schema::connection($o->connection)->create($o->table, function (\Illuminate\Database\Schema\Blueprint $table) use ($o) {
                     $table->engine = 'InnoDB';
                     $table->string($o->primaryKey, 40)->primary();
+                    $table->string('ParentId', 40)->nullable()->default('');
                     $table->enum('Status', ['Draft', 'Published', 'Unpublished', 'Deleted'])->default('Draft');
-                    $table->string('Type', 40)->nullable()->default(NULL);;
+                    $table->string('Type', 40)->nullable()->default(NULL);
                     $table->string('Title', 255);
+                    $table->integer('Sequence')->nullable()->default(NULL);
                     $table->integer('Cache')->nullable()->default(NULL);
                     $table->text('Parameters')->nullable()->default(NULL);
                     $table->datetime('CreatedAt')->nullable()->default(NULL);
