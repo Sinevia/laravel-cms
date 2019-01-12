@@ -407,6 +407,8 @@
                             <option value="CKEditor" <?php echo $selected ?> >CKEditor - Wysiwyg (not recommended)</option>                            
                             <?php $selected = ($wysiwyg == 'TinyMCE') ? 'selected="selected"' : ''; ?>
                             <option value="TinyMCE" <?php echo $selected ?> >TinyMCE - Wysiwyg (not recommended)</option>
+                            <?php $selected = ($wysiwyg == 'BlockEditor') ? 'selected="selected"' : ''; ?>
+                            <option value="BlockEditor" <?php echo $selected ?> >BlockEditor - Experimental</option>
                             <!--
                             <?php $selected = ($wysiwyg == 'HtmlArea') ? 'selected="selected"' : ''; ?>
                             <option value="HtmlArea" <?php echo $selected ?> >HtmlArea - Wysiwyg (not recommended)</option>
