@@ -68,6 +68,16 @@ class CmsController extends \Illuminate\Routing\Controller {
         $pageMetaRobots = $page->MetaRobots;
         $pageCanonicalUrl = $page->CanonicalUrl != "" ? $page->CanonicalUrl : $page->url();
         $templateId = $page->TemplateId;
+        $wysiwyg = $page->Wysiwyg;
+        
+        if ($wysiwyg == 'BlockEditor') {
+            $blocks = json_decode($pageContent);
+            if (is_array($blocks)) {
+                $pageContent = $this->blockEditorBlocksToHtml($blocks);
+            } else {
+                $pageContent = 'Un-blocking error occurred';
+            }
+        }
 
 
         $template = \Sinevia\Cms\Models\Template::find($page->TemplateId);
@@ -101,6 +111,47 @@ class CmsController extends \Illuminate\Routing\Controller {
         return \Sinevia\Cms\Models\Widget::renderWidgets($webpage);
 
         //require_once app_path('Helpers/helpers.php');
+    }
+    
+    function blockEditorBlocksToHtml($blocks) {
+        $html = '';
+        foreach ($blocks as $block) {
+            $type = $block->Type;
+            $methodName = 'blockEditorBlock' . $type . 'ToHtml';
+            if (method_exists($this, $methodName)) {
+                $html .= call_user_func_array([$this, $methodName], [$block]);
+            } else {
+                $html .= 'Block ' . $type . ' renderer does not exist';
+            }
+        }
+        return $html;
+    }
+
+    function blockEditorBlockHeadingToHtml($block) {
+        $level = $block->Attributes->Level ?? 1;
+        $text = $block->Attributes->Text ?? '';
+        return '<h' . $level . '>' . $text . '</h' . $level . '>';
+    }
+
+    function blockEditorBlockTextToHtml($block) {
+        $text = $block->Attributes->Text ?? '';
+        return '<p>' . $text . '</p>';
+    }
+
+    function blockEditorBlockImageToHtml($block) {
+        $url = $block->Attributes->Url ?? '';
+        return '<img src="' . $url . '" class="img img-responsive img-thumbnail" />';
+    }
+
+    function blockEditorBlockCodeToHtml($block) {
+        $language = $block->Attributes->Language ?? '';
+        $code = $block->Attributes->Code ?? '';
+        $html = '';
+        $html .= '<div class="card">';
+        $html .= '  <div class="card-header">Language: '.ucwords($language).'</div>';
+        $html .= '  <div class="card-body"><pre><code>' . htmlentities($code) . '</code></pre></div>';
+        $html .= '</div>';
+        return $html;
     }
 
     function getBlockManager() {
