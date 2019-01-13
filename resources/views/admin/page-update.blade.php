@@ -201,6 +201,31 @@
                             });
                         </script>
                     <?php } ?>
+                    <?php if ($wysiwyg == 'BlockEditor') { ?>
+                        <script src="https://code.jquery.com/ui/1.12.0-beta.1/jquery-ui.min.js"></script>
+                        <script src="https://openwhisk.eu-gb.bluemix.net/api/v1/web/sinevia_live/default/blockarea?a=blockarea"></script>
+                        <script>
+                            $(function () {
+                                $('.page_content_translation').each(function () {
+                                    var randomId = 'random_' + Math.random().toString(36).replace(/[^a-z]+/g, '').substr(2, 10);
+                                    var textArea = $(this).find('textarea');
+                                    $(textArea).attr('id', randomId)
+
+                                    var blocksString = $(textArea).val();
+                                    var editorId = $(textArea).attr('id');
+                                    //var parentId = $('#blockarea').attr('ParentId');
+                                    var blockArea = new BlockArea(editorId);
+                                    if (blocksString != "") {
+                                        blockArea.setBlocks(JSON.parse(blocksString));
+                                    } else {
+                                        blockArea.setBlocks([]);
+                                    }
+                                    blockArea.setParentId('<?php echo $page->Id; ?>');
+                                    blockArea.init();
+                                });
+                            });
+                        </script>
+                    <?php } ?>
                     <div class="form-group" style="width:100%;">
                         <a href="<?php echo \Sinevia\Cms\Helpers\Links::adminMediaManager() ?>" target="_blank" class="btn btn-primary pull-right">
                             Media
