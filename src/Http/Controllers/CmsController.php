@@ -127,22 +127,6 @@ class CmsController extends \Illuminate\Routing\Controller {
         return $html;
     }
 
-    function blockEditorBlockHeadingToHtml($block) {
-        $level = $block->Attributes->Level ?? 1;
-        $text = $block->Attributes->Text ?? '';
-        return '<h' . $level . '>' . $text . '</h' . $level . '>';
-    }
-
-    function blockEditorBlockTextToHtml($block) {
-        $text = $block->Attributes->Text ?? '';
-        return '<p>' . $text . '</p>';
-    }
-
-    function blockEditorBlockImageToHtml($block) {
-        $url = $block->Attributes->Url ?? '';
-        return '<img src="' . $url . '" class="img img-responsive img-thumbnail" />';
-    }
-
     function blockEditorBlockCodeToHtml($block) {
         $language = $block->Attributes->Language ?? '';
         $code = $block->Attributes->Code ?? '';
@@ -152,6 +136,27 @@ class CmsController extends \Illuminate\Routing\Controller {
         $html .= '  <div class="card-body"><pre><code>' . htmlentities($code) . '</code></pre></div>';
         $html .= '</div>';
         return $html;
+    }
+    
+    function blockEditorBlockHeadingToHtml($block) {
+        $level = $block->Attributes->Level ?? 1;
+        $text = $block->Attributes->Text ?? '';
+        return '<h' . $level . '>' . $text . '</h' . $level . '>';
+    }
+
+    function blockEditorBlockImageToHtml($block) {
+        $url = $block->Attributes->Url ?? '';
+        return '<img src="' . $url . '" class="img img-responsive img-thumbnail" />';
+    }
+    
+    function blockEditorBlockRawHtmlToHtml($block) {
+        $text = $block->Attributes->Text ?? '';
+        return $text;
+    }
+
+    function blockEditorBlockTextToHtml($block) {
+        $text = $block->Attributes->Text ?? '';
+        return '<p>' . $text . '</p>';
     }
 
     function getBlockManager() {
