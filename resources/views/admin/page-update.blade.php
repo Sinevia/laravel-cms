@@ -203,7 +203,7 @@
                     <?php } ?>
                     <?php if ($wysiwyg == 'BlockEditor') { ?>
                         <script src="https://code.jquery.com/ui/1.12.0-beta.1/jquery-ui.min.js"></script>
-                        <script src="https://openwhisk.eu-gb.bluemix.net/api/v1/web/sinevia_live/default/blockarea?a=blockarea"></script>
+                        <script src="https://openwhisk.eu-gb.bluemix.net/api/v1/web/sinevia_live/default/blockarea/blockarea/"></script>
                         <script>
                             $(function () {
                                 $('.page_content_translation').each(function () {
