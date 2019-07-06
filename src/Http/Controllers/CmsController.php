@@ -225,9 +225,14 @@ class CmsController extends \Illuminate\Routing\Controller {
         $session_order_by = \Session::get('cms_page_manager_by', 'Title');
         $session_order_sort = \Session::get('cms_page_manager_sort', 'asc');
         $orderby = request('by', $session_order_by);
-        $sort = request('sort');
+        $sort = request('sort', 'ASC');
         $page = request('page', 0);
         $results_per_page = 20;
+        
+        if (in_array(strtolower($sort), ["asc", "desc"]){
+            $sort = 'ASC';
+        }
+            
         \Session::put('cms_page_manager_by', $orderby); // Keep for session
         \Session::put('cms_page_manager_sort', $sort);  // Keep for session
 
