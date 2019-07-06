@@ -229,7 +229,7 @@ class CmsController extends \Illuminate\Routing\Controller {
         $page = request('page', 0);
         $results_per_page = 20;
         
-        if (in_array(strtolower($sort), ["asc", "desc"]){
+        if (in_array(strtolower($sort), ["asc", "desc"]) == false){
             $sort = 'ASC';
         }
             
