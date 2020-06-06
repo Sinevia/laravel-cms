@@ -25,7 +25,7 @@ class CmsController extends \Illuminate\Routing\Controller {
             $uri = substr($uri, 3);
         }
 
-        $alias = str_replace_first('cms/', '', $uri);
+        $alias = \Illuminate\Support\Str::replaceFirst('cms/', '', $uri);
 
         $page = \Sinevia\Cms\Models\Page::where('Alias', $alias)
                 ->orWhere('Alias', '=', '/' . $alias)
