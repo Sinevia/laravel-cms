@@ -1,5 +1,12 @@
-<?php if (View::exists(config('cms.layout-master'))) { ?>
-    @extends(config('cms.layout-master'))
+<?php
+$masterTemplate = trim(config('cms.layout-master'));
+$hasMasterTemplate = ($masterTemplate != "");
+if ($hasMasterTemplate) {
+    $hasMasterTemplate = View::exists($masterTemplate);
+}
+?>
+<?php if ($hasMasterTemplate == true) { ?>
+    @extends($masterTemplate)
 <?php } ?>
 
 @section('webpage_title', 'Page Manager')
@@ -7,8 +14,8 @@
 @section('webpage_header')
 <h1>
     Page Manager
-    <button type="button" class="btn btn-primary pull-right" onclick="showPageCreateModal();">
-        <span class="glyphicon glyphicon-plus-sign"></span>
+    <button type="button" class="btn btn-primary float-right" onclick="showPageCreateModal();">
+        <span class="fa fa-plus-circle"></span>
         Add Page
     </button>
 </h1>
@@ -26,7 +33,7 @@
 <div class="box box-primary">
     <div class="box-header with-border">
         <!-- START: Filter -->
-        <div class="well hidden-sm hidden-xs">
+        <div class="well">
             <form class="form-inline" name="form_filter" method="get" style="margin:0px;">
                 Filter:
                 &nbsp;
@@ -48,11 +55,11 @@
                 </div>
 
                 <button class="btn btn-primary">
-                    <span class="glyphicon glyphicon-search"></span>
+                    <span class="fa fa-filter"></span>
                 </button>
 
-                <button type="button" class="btn btn-primary pull-right" onclick="showPageCreateModal();">
-                    <span class="glyphicon glyphicon-plus-sign"></span>
+                <button type="button" class="btn btn-primary float-right" onclick="showPageCreateModal();">
+                    <span class="fa fa-plus-circle"></span>
                     Add Page
                 </button>
             </form>
