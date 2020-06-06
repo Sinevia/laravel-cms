@@ -18,9 +18,15 @@ class CmsServiceProvider extends ServiceProvider {
 
         $this->publishes([
             dirname(__DIR__) . '/config/cms.php' => config_path('cms.php'),
+                ], 'config');
+        
+        $this->publishes([
             dirname(__DIR__) . '/database/migrations' => database_path('migrations'),
+                ], 'migrations');
+        
+        $this->publishes([
             dirname(__DIR__) . '/resources/views' => resource_path('views/cms'),
-        ]);
+                ], 'views');
     }
 
     /**
@@ -29,7 +35,9 @@ class CmsServiceProvider extends ServiceProvider {
      * @return void
      */
     public function register() {
-        //
+        $this->mergeConfigFrom(
+                dirname(__DIR__) . '/config/cms.php', 'cms'
+        );
     }
 
 }
