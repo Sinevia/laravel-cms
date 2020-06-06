@@ -36,7 +36,11 @@ composer require lesichkovm/laravel-advanced-model
 ```php
 composer require sinevia/laravel-cms
 php artisan migrate
-php artisan vendor:publish
+php artisan vendor:publish --tag=config
+// If you want the migrations, usually not needed
+php artisan vendor:publish --tag=migrations
+// If you want the views, usually not  needed
+php artisan vendor:publish --tag=views
 ```
 
 Word of warning. Do use a stable package, as "dev-master" is a work in progress.
