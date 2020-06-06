@@ -69,7 +69,7 @@ class CmsController extends \Illuminate\Routing\Controller {
         $pageCanonicalUrl = $page->CanonicalUrl != "" ? $page->CanonicalUrl : $page->url();
         $templateId = $page->TemplateId;
         $wysiwyg = $page->Wysiwyg;
-        
+
         if ($wysiwyg == 'BlockEditor') {
             $blocks = json_decode($pageContent);
             if (is_array($blocks)) {
@@ -112,7 +112,7 @@ class CmsController extends \Illuminate\Routing\Controller {
 
         //require_once app_path('Helpers/helpers.php');
     }
-    
+
     function blockEditorBlocksToHtml($blocks) {
         $html = '';
         foreach ($blocks as $block) {
@@ -132,12 +132,12 @@ class CmsController extends \Illuminate\Routing\Controller {
         $code = $block->Attributes->Code ?? '';
         $html = '';
         $html .= '<div class="card">';
-        $html .= '  <div class="card-header">Language: '.ucwords($language).'</div>';
+        $html .= '  <div class="card-header">Language: ' . ucwords($language) . '</div>';
         $html .= '  <div class="card-body"><pre><code>' . htmlentities($code) . '</code></pre></div>';
         $html .= '</div>';
         return $html;
     }
-    
+
     function blockEditorBlockHeadingToHtml($block) {
         $level = $block->Attributes->Level ?? 1;
         $text = $block->Attributes->Text ?? '';
@@ -148,7 +148,7 @@ class CmsController extends \Illuminate\Routing\Controller {
         $url = $block->Attributes->Url ?? '';
         return '<img src="' . $url . '" class="img img-responsive img-thumbnail" />';
     }
-    
+
     function blockEditorBlockRawHtmlToHtml($block) {
         $text = $block->Attributes->Text ?? '';
         return $text;
@@ -168,12 +168,17 @@ class CmsController extends \Illuminate\Routing\Controller {
         if ($filterStatus == 'Deleted') {
             $view = 'trash';
         }
-        $session_order_by = \Session::get('cms_template_manager_by', 'Id');
-        $session_order_sort = \Session::get('cms_template_manager_sort', 'asc');
+        $session_order_by = \Session::get('cms_block_manager_by', 'Id');
+        $session_order_sort = \Session::get('cms_block_manager_sort', 'asc');
         $orderby = request('by', $session_order_by);
         $sort = request('sort');
         $page = request('page', 0);
         $results_per_page = 20;
+        
+        if (in_array(strtolower($sort), ["asc", "desc"]) == false) {
+            $sort = 'ASC';
+        }
+        
         \Session::put('cms_block_manager_by', $orderby); // Keep for session
         \Session::put('cms_block_manager_sort', $sort);  // Keep for session
 
@@ -228,11 +233,11 @@ class CmsController extends \Illuminate\Routing\Controller {
         $sort = request('sort', 'ASC');
         $page = request('page', 0);
         $results_per_page = 20;
-        
-        if (in_array(strtolower($sort), ["asc", "desc"]) == false){
+
+        if (in_array(strtolower($sort), ["asc", "desc"]) == false) {
             $sort = 'ASC';
         }
-            
+
         \Session::put('cms_page_manager_by', $orderby); // Keep for session
         \Session::put('cms_page_manager_sort', $sort);  // Keep for session
 
@@ -302,11 +307,14 @@ class CmsController extends \Illuminate\Routing\Controller {
             $view = 'trash';
         }
         $session_order_by = \Session::get('cms_template_manager_by', 'Id');
-        $session_order_sort = \Session::get('cms_template_manager_sort', 'asc');
+        $session_order_sort = trim(\Session::get('cms_template_manager_sort', 'asc'));
         $orderby = request('by', $session_order_by);
-        $sort = request('sort');
+        $sort = request('sort', $session_order_sort);
         $page = request('page', 0);
         $results_per_page = 20;
+        if (in_array(strtolower($sort), ['asc', 'desc']) == false) {
+            $sort = 'asc';
+        }
         \Session::put('cms_template_manager_by', $orderby); // Keep for session
         \Session::put('cms_template_manager_sort', $sort);  // Keep for session
 
@@ -357,6 +365,11 @@ class CmsController extends \Illuminate\Routing\Controller {
         $sort = request('sort');
         $page = request('page', 0);
         $results_per_page = 20;
+        
+        if (in_array(strtolower($sort), ["asc", "desc"]) == false) {
+            $sort = 'ASC';
+        }
+        
         \Session::put('cms_translation_manager_by', $orderby); // Keep for session
         \Session::put('cms_translation_manager_sort', $sort);  // Keep for session
 
@@ -409,6 +422,11 @@ class CmsController extends \Illuminate\Routing\Controller {
         $sort = request('sort');
         $page = request('page', 0);
         $results_per_page = 20;
+        
+        if (in_array(strtolower($sort), ["asc", "desc"]) == false) {
+            $sort = 'ASC';
+        }
+        
         \Session::put('cms_widget_manager_by', $orderby); // Keep for session
         \Session::put('cms_widget_manager_sort', $sort);  // Keep for session
 
