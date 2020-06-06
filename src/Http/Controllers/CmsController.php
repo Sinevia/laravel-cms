@@ -44,7 +44,7 @@ class CmsController extends \Illuminate\Routing\Controller {
             );
             $aliases = \Sinevia\Cms\Models\Page::pluck('Alias', 'Id')->toArray();
             $aliases = array_filter($aliases, function($alias) {
-                return str_contains($alias, [':']);
+                return \Illuminate\Support\Str::contains($alias, [':']);
             });
             foreach ($aliases as $pageId => $alias) {
                 $alias = strtr($alias, $patterns);
@@ -652,7 +652,7 @@ class CmsController extends \Illuminate\Routing\Controller {
 
         $page = new \Sinevia\Cms\Models\Page;
         $page->Status = 'Draft';
-        $page->Alias = '/' . str_slug($title) . '-' . uniqid(); // Unique for now
+        $page->Alias = '/' . \Illuminate\Support\Str::slug($title) . '-' . uniqid(); // Unique for now
 
         if ($page->save() === false) {
             return redirect()->back()->withErrors('Page COULD NOT be created');
