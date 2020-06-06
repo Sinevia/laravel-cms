@@ -71,7 +71,7 @@ Route::group(['prefix' => '/'], function () {
         
     // or use with simpler regex expression to match any level
     Route::any('/{path?}', '\Sinevia\Cms\Http\Controllers\CmsController@anyPageView')
-        ->where('path', '.+')
+        ->where('path', '.+');
 });
 ```
 
