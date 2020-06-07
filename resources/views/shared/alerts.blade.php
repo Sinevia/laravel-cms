@@ -80,10 +80,12 @@
 
 @push('scripts')
 <script>
-    $(function () {
-        setTimeout(function () {
-            $('#alert-area').hide();
-        }, 15000);
-    });
+    setTimeout(function () {
+        $(function () {
+            setTimeout(function () {
+                $('#alert-area').hide();
+            }, 15000);
+        });
+    }, 2000);
 </script>
 @endpush
