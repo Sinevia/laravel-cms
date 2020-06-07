@@ -118,9 +118,11 @@
                     <!-- START: Page Content -->
                     <?php if ($wysiwyg == 'HtmlArea') { ?>
                         <script>
-                            $(function () {
-                                var html_area = new HtmlArea('page_content');
-                            });
+                            setTimeout(function () {
+                                $(function () {
+                                    var html_area = new HtmlArea('page_content');
+                                });
+                            }, 2000);
                         </script>
                     <?php } ?>
                     <?php if ($wysiwyg == 'Summernote') { ?>
@@ -181,49 +183,54 @@
                             }
                         </style>
                         <script>
-                            $(function () {
-                                $('.page_content').each(function () {
-                                    var editor = CodeMirror.fromTextArea(this, {
-                                        lineNumbers: true,
-                                        matchBrackets: true,
-                                        mode: "application/x-httpd-php",
-                                        indentUnit: 4,
-                                        indentWithTabs: true,
-                                        enterMode: "keep", tabMode: "shift"});
+                            setTimeout(function () {
+
+                                $(function () {
+                                    $('.page_content').each(function () {
+                                        var editor = CodeMirror.fromTextArea(this, {
+                                            lineNumbers: true,
+                                            matchBrackets: true,
+                                            mode: "application/x-httpd-php",
+                                            indentUnit: 4,
+                                            indentWithTabs: true,
+                                            enterMode: "keep", tabMode: "shift"});
+                                    });
+                                    //                            var editor = CodeMirror.fromTextArea(document.getElementById("page_content"), {
+                                    //                                lineNumbers: true,
+                                    //                                matchBrackets: true,
+                                    //                                mode: "application/x-httpd-php",
+                                    //                                indentUnit: 4,
+                                    //                                indentWithTabs: true,
+                                    //                                enterMode: "keep", tabMode: "shift"});
                                 });
-                                //                            var editor = CodeMirror.fromTextArea(document.getElementById("page_content"), {
-                                //                                lineNumbers: true,
-                                //                                matchBrackets: true,
-                                //                                mode: "application/x-httpd-php",
-                                //                                indentUnit: 4,
-                                //                                indentWithTabs: true,
-                                //                                enterMode: "keep", tabMode: "shift"});
-                            });
+                            }, 2000);
                         </script>
                     <?php } ?>
                     <?php if ($wysiwyg == 'BlockEditor') { ?>
                         <script src="https://code.jquery.com/ui/1.12.0-beta.1/jquery-ui.min.js"></script>
                         <script src="https://openwhisk.eu-gb.bluemix.net/api/v1/web/sinevia_live/default/blockarea/blockarea/"></script>
                         <script>
-                            $(function () {
-                                $('.page_content_translation').each(function () {
-                                    var randomId = 'random_' + Math.random().toString(36).replace(/[^a-z]+/g, '').substr(2, 10);
-                                    var textArea = $(this).find('textarea');
-                                    $(textArea).attr('id', randomId)
+                            setTimeout(function () {
+                                $(function () {
+                                    $('.page_content_translation').each(function () {
+                                        var randomId = 'random_' + Math.random().toString(36).replace(/[^a-z]+/g, '').substr(2, 10);
+                                        var textArea = $(this).find('textarea');
+                                        $(textArea).attr('id', randomId)
 
-                                    var blocksString = $(textArea).val();
-                                    var editorId = $(textArea).attr('id');
-                                    //var parentId = $('#blockarea').attr('ParentId');
-                                    var blockArea = new BlockArea(editorId);
-                                    if (blocksString != "") {
-                                        blockArea.setBlocks(JSON.parse(blocksString));
-                                    } else {
-                                        blockArea.setBlocks([]);
-                                    }
-                                    blockArea.setParentId('<?php echo $page->Id; ?>');
-                                    blockArea.init();
+                                        var blocksString = $(textArea).val();
+                                        var editorId = $(textArea).attr('id');
+                                        //var parentId = $('#blockarea').attr('ParentId');
+                                        var blockArea = new BlockArea(editorId);
+                                        if (blocksString != "") {
+                                            blockArea.setBlocks(JSON.parse(blocksString));
+                                        } else {
+                                            blockArea.setBlocks([]);
+                                        }
+                                        blockArea.setParentId('<?php echo $page->Id; ?>');
+                                        blockArea.init();
+                                    });
                                 });
-                            });
+                            }, 2000);
                         </script>
                     <?php } ?>
                     <div class="form-group" style="width:100%;">
@@ -312,7 +319,7 @@
                         </select>
                     </div>
                     <!-- END: Meta Robots -->
-                    
+
                     <!-- START: Canonical Url -->
                     <div class="form-group">                   
                         <label>
@@ -484,14 +491,16 @@
 <br />
 
 <script type="text/javascript">
-    $(window).keypress(function (event) {
-        if (!(event.which === 115 && event.ctrlKey) && !(event.which === 19)) {
-            return true;
-        }
-        $('#ButtonApply').trigger('click');
-        event.preventDefault();
-        return false;
-    });
+    setTimeout(function () {
+        $(document).keypress(function (event) {
+            if (!(event.which === 115 && event.ctrlKey) && !(event.which === 19)) {
+                return true;
+            }
+            $('#ButtonApply').trigger('click');
+            event.preventDefault();
+            return false;
+        });
+    }, 2000);
 </script>
 
 <!-- START: File Upload Modal Dialog -->
