@@ -94,15 +94,17 @@
                 }
             </style>
             <script>
-                $(function () {
-                    var editor = CodeMirror.fromTextArea(document.getElementById("WidgetContent"), {
-                        lineNumbers: true,
-                        matchBrackets: true,
-                        mode: "application/x-httpd-php",
-                        indentUnit: 4,
-                        indentWithTabs: true,
-                        enterMode: "keep", tabMode: "shift"});
-                });
+                setTimeout(function () {
+                    $(function () {
+                        var editor = CodeMirror.fromTextArea(document.getElementById("WidgetContent"), {
+                            lineNumbers: true,
+                            matchBrackets: true,
+                            mode: "application/x-httpd-php",
+                            indentUnit: 4,
+                            indentWithTabs: true,
+                            enterMode: "keep", tabMode: "shift"});
+                    });
+                }, 2000);
             </script>
             <!-- END: Code Mirror -->
 
@@ -148,9 +150,11 @@
             <div id="widget_parameters"></div>
 
             <script>
-                $(function () {
-                    type_selected();
-                });
+                setTimeout(function () {
+                    $(function () {
+                        type_selected();
+                    });
+                }, 2000);
 
                 function type_selected() {
                     var parameters = <?php echo json_encode($parameters); ?>;
@@ -229,14 +233,16 @@
 <br />
 
 <script type="text/javascript">
-    $(window).keypress(function (event) {
-        if (!(event.which === 115 && event.ctrlKey) && !(event.which === 19)) {
-            return true;
-        }
-        $('#ButtonApply').trigger('click');
-        event.preventDefault();
-        return false;
-    });
+    setTimeout(function () {
+        $(window).keypress(function (event) {
+            if (!(event.which === 115 && event.ctrlKey) && !(event.which === 19)) {
+                return true;
+            }
+            $('#ButtonApply').trigger('click');
+            event.preventDefault();
+            return false;
+        });
+    }, 2000);
 </script>
 
 <p class="text-info">
