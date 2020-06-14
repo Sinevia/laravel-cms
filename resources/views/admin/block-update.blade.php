@@ -97,15 +97,17 @@
                 }
             </style>
             <script>
-                $(function () {
-                    $('.translation_content').each(function () {
-                        var editor = CodeMirror.fromTextArea(this, {
-                            lineNumbers: true,
-                            matchBrackets: true,
-                            mode: "application/x-httpd-php",
-                            indentUnit: 4,
-                            indentWithTabs: true,
-                            enterMode: "keep", tabMode: "shift"
+                setTimeout(function () {
+                    $(function () {
+                        $('.translation_content').each(function () {
+                            var editor = CodeMirror.fromTextArea(this, {
+                                lineNumbers: true,
+                                matchBrackets: true,
+                                mode: "application/x-httpd-php",
+                                indentUnit: 4,
+                                indentWithTabs: true,
+                                enterMode: "keep", tabMode: "shift"
+                            });
                         });
                     });
                 });
