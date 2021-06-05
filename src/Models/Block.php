@@ -33,6 +33,11 @@ class Block extends BaseModel {
             }
             $blockContentDynamic = \Sinevia\Cms\Helpers\Template::fromString($blockContent);
             $string = str_replace("[[BLOCK_$blockId]]", $blockContentDynamic, $string);
+            
+            // Render any embedded blocks in the current block
+            if (strpos($string, '[[BLOCK_') !== false) {
+                $string = self::renderBlocks($string);
+            }
         }
         return $string;
     }
