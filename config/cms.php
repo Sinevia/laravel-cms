@@ -8,6 +8,7 @@ return [
     'routes' => true,
     // layout where the CMS will show into, i.e. admin.layouts.master
     'layout-master' => 'cms::admin.layout',
+    // Bootstrap CSS version
     'bootstrap-version' => '4',
     // URLs
     'urls' => [
