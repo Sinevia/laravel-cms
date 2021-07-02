@@ -25,7 +25,7 @@ class CmsServiceProvider extends ServiceProvider {
                 ], 'migrations');
         
         $this->publishes([
-            dirname(__DIR__) . '/resources/views' => resource_path('views/cms'),
+            dirname(__DIR__) . '/resources/views' => resource_path('views/vendor/cms'),
                 ], 'views');
     }
 
