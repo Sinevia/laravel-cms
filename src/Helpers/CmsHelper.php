@@ -16,7 +16,16 @@ class CmsHelper {
         return json_encode(['status' => 'success', 'message' => $message, 'data' => $data]);
     }
     
-        /**
+    public static function arrayToHtmlAttributes(array $array) {
+        $data = str_replace("=", '="', http_build_query($array, null, '" ', PHP_QUERY_RFC3986)) . '"';
+        $data = str_replace('%20', ' ', $data);
+        $data = str_replace('%28', '(', $data);
+        $data = str_replace('%29', ')', $data);
+        $data = str_replace('%3B', ';', $data);
+        return $data;
+    }
+    
+    /**
      * Lists the files and folders and returns them in a handy array.
      * @access public
      */
