@@ -8,6 +8,7 @@ return [
     'routes' => true,
     // layout where the CMS will show into, i.e. admin.layouts.master
     'layout-master' => 'cms::admin.layout',
+    'bootstrap-version' => '4',
     // URLs
     'urls' => [
         'media-manager' => '/your-media-manager-url',
