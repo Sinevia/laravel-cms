@@ -161,7 +161,7 @@
         <!-- END: Categories -->
 
         <!-- START: Pagination -->    
-        {!! $pages->render() !!}
+        {!! $pages->render("cms::shared/bootstrap-5/pagination") !!}
         <!-- END: Pagination -->
     </div>
 
