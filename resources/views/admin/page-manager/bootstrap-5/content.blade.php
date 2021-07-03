@@ -44,15 +44,14 @@
     </div>
 
     <div class="box-body">
-
         <ul class="nav nav-tabs" style="margin-bottom: 3px;">
-            <li class="<?php if ($view == '') { ?>active<?php } ?>">
-                <a href="?view=all">
+            <li class="nav-item">
+                <a class="nav-link <?php if ($view == '' || $view == 'all' ) { ?>active<?php } ?>"  href="?view=all">
                     <span class="glyphicon glyphicon-list"></span> Live
                 </a>
             </li>
-            <li class="<?php if ($view == 'trash') { ?>active<?php } ?>">
-                <a href="?&view=trash">
+            <li class="nav-item">
+                <a class="nav-link <?php if ($view == 'trash') { ?>active<?php } ?>" href="?&view=trash">
                     <span class="glyphicon glyphicon-trash"></span> Trash
                 </a>
             </li>
@@ -66,11 +65,11 @@
             .table-striped > tbody > tr:nth-child(2n+1){
                 background-color: #F9F9F9 !important;
             }
-            #table_articles tr:hover {
+            #table_pages tr:hover {
                 background-color: #FEFF8F !important;
             }
         </style>
-        <table id="table_articles" class="table table-striped">
+        <table id="table_pages" class="table table-striped">
             <tr>
                 <th style="text-align:center;">
                     <a href="?cmd=pages-manager&amp;by=Title&amp;sort=<?php if ($sort == 'asc') { ?>desc<?php } else { ?>asc<?php } ?>">
@@ -112,7 +111,9 @@
                         ?>
                     </a>
                 </th>
-                <th style="text-align:center;width:160px;">Action</th>
+                <th style="text-align:center;width:230px;">
+                    Action
+                </th>
             </tr>
 
             <?php foreach ($pages as $page) { ?>
@@ -132,24 +133,24 @@
                     </td>
                     <td style="text-align:center;vertical-align: middle;">
                         <a href="<?php echo $page->url(); ?>" class="btn btn-sm btn-success" target="_blank">
-                            <span class="glyphicon glyphicon-eye-open"></span>
+                            @include("cms::shared/icons/bootstrap/bi-eye")
                             View
                         </a>
                         <a href="<?php echo \Sinevia\Cms\Helpers\Links::adminPageUpdate(['PageId' => $page['Id']]); ?>" class="btn btn-sm btn-warning">
-                            <span class="glyphicon glyphicon-edit"></span>
+                            @include("cms::shared/icons/bootstrap/bi-pencil-square")
                             Edit
                         </a>
 
                         <?php if ($page->Status == 'Deleted') { ?>
                             <button class="btn btn-sm btn-danger" onclick="confirmPageDelete('<?php echo $page->Id; ?>');">
-                                <span class="glyphicon glyphicon-remove-sign"></span>
+                                @include("cms::shared/icons/bootstrap/bi-x-circle")
                                 Delete
                             </button>
                         <?php } ?>
 
                         <?php if ($page->Status != 'Deleted') { ?>
                             <button class="btn btn-sm btn-danger" onclick="confirmPageMoveToTrash('<?php echo $page->Id; ?>');">
-                                <span class="glyphicon glyphicon-trash"></span>
+                                @include("cms::shared/icons/bootstrap/bi-trash")
                                 Trash
                             </button>
                         <?php } ?>
