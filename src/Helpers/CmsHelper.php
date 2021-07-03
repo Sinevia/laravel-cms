@@ -17,12 +17,18 @@ class CmsHelper {
     }
     
     public static function arrayToHtmlAttributes(array $array) {
-        $data = str_replace("=", '="', http_build_query($array, null, '" ', PHP_QUERY_RFC3986)) . '"';
-        $data = str_replace('%20', ' ', $data);
-        $data = str_replace('%28', '(', $data);
-        $data = str_replace('%29', ')', $data);
-        $data = str_replace('%3B', ';', $data);
-        return $data;
+        if (count($array) < 1) {
+            return '';
+        }
+
+        ksort($array);
+        $attributes = array();
+        foreach ($array as $name => $value) {
+            if ($value != "" || $value != null) {
+                $attributes[] = $name . '="' . addcslashes($value, '"') . '"';
+            }
+        }
+        return count($attributes) > 0 ? (" " . implode(" ", $attributes)) : "";
     }
     
     /**
