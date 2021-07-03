@@ -536,8 +536,10 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">Choose Image to Upload</h4>
+                <h5 class="modal-title">
+                    Choose Image to Upload
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form name="form_upload_file" method="post" target="iframe_file_upload" action="?cmd=page-file-upload" enctype="multipart/form-data" style="margin:0px;padding:0px;">
@@ -555,10 +557,10 @@
                 </form>
                 <iframe name="iframe_file_upload" style="display:none;"></iframe>
             </div>
-            <div class="modal-footer">
-                <button class="btn btn-info pull-left" data-dismiss="modal">
-                    <span class="glyphicon glyphicon-chevron-left"></span>
-                    Cancel
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    @include("cms::shared/icons/bootstrap/bi-chevron-left")
+                    Close
                 </button>
                 <button class="btn btn-success" data-dismiss="modal" onclick="$('#loading').show();
                         form_upload_file.submit();">
@@ -583,8 +585,10 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">Add Translation Language</h4>
+                <h5 class="modal-title">
+                    Add Translation Language
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form name="form_language_add" method="post" action="<?php echo \Sinevia\Cms\Helpers\Links::adminPageTranslationCreate(); ?>" style="margin:0px;padding:0px;">
@@ -608,14 +612,14 @@
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
                 </form>
             </div>
-            <div class="modal-footer">
-                <button class="btn btn-info pull-left" data-dismiss="modal">
-                    <span class="glyphicon glyphicon-chevron-left"></span>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    @include("cms::shared/icons/bootstrap/bi-chevron-left")
                     Cancel
                 </button>
                 <button class="btn btn-success" data-dismiss="modal" onclick="$('#loading').show();
                         form_language_add.submit();">
-                    <span class="glyphicon glyphicon-plus-sign"></span>
+                    @include("cms::shared/icons/bootstrap/bi-plus-circle")
                     Add Translation
                 </button>
             </div>
@@ -634,8 +638,10 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">Delete <span class="modal_language_delete_language_name"></span> Translation</h4>
+                <h5 class="modal-title">
+                    Delete <span class="modal_language_delete_language_name"></span> Translation
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form name="form_language_delete" method="post" action="<?php echo \Sinevia\Cms\Helpers\Links::adminPageTranslationDelete(); ?>" style="margin:0px;padding:0px;">
@@ -649,14 +655,14 @@
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
                 </form>
             </div>
-            <div class="modal-footer">
-                <button class="btn btn-info pull-left" data-dismiss="modal">
-                    <span class="glyphicon glyphicon-chevron-left"></span>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    @include("cms::shared/icons/bootstrap/bi-chevron-left")
                     Cancel
                 </button>
                 <button class="btn btn-warning" data-dismiss="modal" onclick="$('#loading').show();
                         form_language_delete.submit();">
-                    <span class="glyphicon glyphicon-remove-sign"></span>
+                    @include("cms::shared/icons/bootstrap/bi-dash-circle")
                     Delete Translation
                 </button>
             </div>
