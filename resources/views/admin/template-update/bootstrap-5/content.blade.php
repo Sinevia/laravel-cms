@@ -1,326 +1,151 @@
-<div class="box box-info">
-    <div class="box-header">
-        <div>
-            <a href="<?php echo \Sinevia\Cms\Helpers\Links::adminTemplateManager(); ?>" class="btn btn-info">
-                @include("cms::shared/icons/bootstrap/bi-chevron-left")
-                Cancel
-            </a>
+<div class="box box-primary">
+    <div class="box-header with-border">
+        <!-- START: Filter -->
+        <div class="well">
+            <form class="form-inline" name="form_filter" method="get" style="margin:0px;">
+                <div class="row">
+                    <div class="col-sm-1">
+                        Filter:
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label class="sr-only">Status</label>
+                            <select id="filter_status" name="filter_status" class="form-control" onchange="form_filter.submit();">
+                                <option value="">- Status -</option>
+                                <?php $selected = ($filterStatus != 'Draft') ? '' : ' selected="selected"'; ?>
+                                <option value="Draft" <?php echo $selected; ?>>Draft</option>
+                                <?php $selected = ($filterStatus != 'Published') ? '' : ' selected="selected"'; ?>
+                                <option value="Published" <?php echo $selected; ?>>Published</option>
+                                <?php $selected = ($filterStatus != 'Unpublished') ? '' : ' selected="selected"'; ?>
+                                <option value="Unpublished" <?php echo $selected; ?>>Unpublished</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <button class="btn btn-primary" title="Filter">
+                            @include("cms::shared.icons.bootstrap.bi-filter")
+                        </button>
 
-            <button type="button" class="btn btn-success float-end" style="margin:0px 10px;"  onclick="$('#form_action').val('save-and-exit');
-                    FORM_TEMPLATE_EDIT.submit();">
-                @include("cms::shared/icons/bootstrap/bi-check-all")
-                Save
-            </button>
-
-            <button type="button" class="btn btn-success float-end" style="margin:0px 10px;" onclick="$('#form_action').val('save');
-                    FORM_TEMPLATE_EDIT.submit();">
-                @include("cms::shared/icons/bootstrap/bi-check")
-                Apply
-            </button>
+                        <button type="button" class="btn btn-primary float-end" onclick="showTemplateCreateModal();">
+                            @include("cms::shared.icons.bootstrap.bi-plus-circle")
+                            Add Template
+                        </button>
+                    </div>
+                </div>
+            </form>
         </div>
+        <!-- END: Filter -->
+
     </div>
 
     <div class="box-body">
+        <ul class="nav nav-tabs" style="margin-bottom: 3px;">
+            <li class="nav-item">
+                <a href="?view=all" class="nav-link <?php if ($view == '' OR $view == 'all') { ?>active<?php } ?>">
+                    <span class="glyphicon glyphicon-list"></span> Live
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="?&view=trash" class="nav-link <?php if ($view == 'trash') { ?>active<?php } ?>">
+                    @include("cms::shared/icons/bootstrap/bi-trash")
+                    Trash
+                </a>
+            </li>
+        </ul>
 
-        <form name="FORM_TEMPLATE_EDIT" action="" method="post">
-
-            <!-- START: Status -->
-            <div class="form-group mt-3">
-                <label>
-                    Status
-                </label>
-                <select class="form-control" name="Status">
-                    <option value=""></option>
-                    <?php $selected = ($status == 'Deleted') ? 'selected="selected"' : ''; ?>
-                    <option value="Deleted" <?php echo $selected ?> >Deleted</option>
-                    <?php $selected = ($status == 'Draft') ? 'selected="selected"' : ''; ?>
-                    <option value="Draft" <?php echo $selected ?> >Draft</option>
-                    <?php $selected = ($status == 'Published') ? 'selected="selected"' : ''; ?>
-                    <option value="Published" <?php echo $selected ?> >Published</option>
-                    <?php $selected = ($status == 'Unpublished') ? 'selected="selected"' : ''; ?>
-                    <option value="Unpublished" <?php echo $selected ?> >Unpublished</option>
-                </select>
-            </div>
-            <!-- END: Status -->
-
-
-            <!-- START: Title -->
-            <div class="form-group mt-3">
-                <label>Title</label>
-                <input class="form-control" name="Title" type="text" value="<?php echo htmlentities($title); ?>" />
-            </div>
-            <!-- END: Title -->
-
-
-            <!-- START: Code Mirror -->
-            <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/codemirror/3.20.0/codemirror.min.css" />
-            <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/codemirror/3.20.0/codemirror.min.js"></script>
-            <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/codemirror/3.20.0/mode/xml/xml.min.js"></script>
-            <script src="//cdnjs.cloudflare.com/ajax/libs/codemirror/3.20.0/mode/htmlmixed/htmlmixed.min.js"></script>
-            <script src="//cdnjs.cloudflare.com/ajax/libs/codemirror/3.20.0/mode/javascript/javascript.js"></script>
-            <script src="//cdnjs.cloudflare.com/ajax/libs/codemirror/3.20.0/mode/css/css.js"></script>
-            <script src="//cdnjs.cloudflare.com/ajax/libs/codemirror/3.20.0/mode/clike/clike.min.js"></script>
-            <script src="//cdnjs.cloudflare.com/ajax/libs/codemirror/3.20.0/mode/php/php.min.js"></script>
-            <script src="//cdnjs.cloudflare.com/ajax/libs/codemirror/2.36.0/formatting.min.js"></script>
-            <script src="//cdnjs.cloudflare.com/ajax/libs/codemirror/3.22.0/addon/edit/matchbrackets.min.js"></script>
-
-            <style>
-                .CodeMirror {
-                    border: 1px solid #eee;
-                    height: auto;
-                }
-            </style>
-            <script>
-                setTimeout(function () {
-                    $(function () {
-                        $('.translation_content').each(function () {
-                            var editor = CodeMirror.fromTextArea(this, {
-                                lineNumbers: true,
-                                matchBrackets: true,
-                                mode: "application/x-httpd-php",
-                                indentUnit: 4,
-                                indentWithTabs: true,
-                                enterMode: "keep", tabMode: "shift"
-                            });
-                        });
-                    });
-                }, 2000);
-            </script>
-            <!-- END: Code Mirror -->
-
-            <!-- START: Content -->
-            <div class="form-group mt-3">
-                <label for="template_content">
-                    Content
-                </label>
-                <ul class="nav nav-tabs">
-                    <li class="nav-item active">
-                        <a class="nav-link" href="#">Content</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <select class="form-control" onchange="showTranslationContent(this.value);" style="float:left;display: inline;float: left;width: 115px;">
-                            <?php foreach ($template_translations as $tr) { ?>
-                                <?php $language = $tr['Language']; ?>
-                                <?php $selected = ($language == 'en') ? 'selected="selected"' : ''; ?>
-                                <option value="<?php echo $language; ?>" <?php echo $selected; ?>>
-                                    <?php echo \Sinevia\Cms\Helpers\Languages::getLanguageByIso1($language); ?>
-                                </option>
-                            <?php } ?>
-                        </select>
-
-                        <span style="display: inline-block;margin: 10px;cursor:pointer;">
-                            @include("cms::shared/icons/bootstrap/bi-plus-circle",['onclick'=>'modal_language_add_show();', 'fill'=>'green'])
-                        </span>
-                        <span style="display: inline-block;margin: 10px;cursor:pointer;">
-                            @include("cms::shared/icons/bootstrap/bi-dash-circle",['onclick'=>"modal_language_delete_show($(this).parent().find('select').val(), $(this).parent().find('select option:selected').text());", 'fill'=>'red'])
-                        </span>
-                    </li>
-                </ul>
-                <?php foreach ($template_translations as $tr) { ?>
-                    <?php $language = $tr['Language']; ?>
-                    <?php $display = ($language == 'en') ? '' : 'display:none;'; ?>
-                    <div class="translation_content_translation" id="translation_content_translation_<?php echo $language; ?>" style="min-height:50px;<?php echo $display; ?>">
-                        <textarea class="form-control translation_content" name="Content[<?php echo $language; ?>]" style="height:300px;width:100%;"><?php echo htmlentities($tr['Content']); ?></textarea>
-                    </div>
-                <?php } ?>
-                <script>
-                    function showTranslationContent(language) {
-                        $('.translation_content_translation').hide();
-                        $('#translation_content_translation_' + language).show();
-                    }
-                </script>
-
-            </div>
-            <!-- END: Content -->
-
-            <input type="hidden" name="_token" value="{{ csrf_token() }}">
-            <input type="hidden" name="action" id="form_action" value="save-and-exit">
-        </form>
-
-    </div>
-
-    <div class="box box-footer">
-        <a href="<?php echo \Sinevia\Cms\Helpers\Links::adminTemplateManager(); ?>" class="btn btn-info">
-            @include("cms::shared/icons/bootstrap/bi-chevron-left")
-            Cancel
-        </a>
-
-        <button type="button" class="btn btn-success float-end" style="margin:0px 10px;"  onclick="$('#form_action').val('save-and-exit');
-                FORM_TEMPLATE_EDIT.submit();">
-            @include("cms::shared/icons/bootstrap/bi-check-all")
-            Save
-        </button>
-
-        <button type="button" id="ButtonApply" class="btn btn-success float-end" style="margin:0px 10px;" onclick="$('#form_action').val('save');
-                FORM_TEMPLATE_EDIT.submit();">
-            @include("cms::shared/icons/bootstrap/bi-check")
-            Apply
-        </button>
-    </div>
-
-
-</div>
-
-
-<br />
-<br />
-<br />
-
-<script type="text/javascript">
-    setTimeout(function () {
-        $(window).bind('keydown', function (event) {
-            if (event.ctrlKey || event.metaKey) {
-                switch (String.fromCharCode(event.which).toLowerCase()) {
-                    case 's':
-                        event.preventDefault();
-                        $('#ButtonApply').trigger('click');
-                        break;
-                }
+        <!--START: Categories -->
+        <style scoped="scoped">
+            .table-striped > tbody > tr:nth-child(2n+1) > td{
+                background-color: transparent !important;
             }
-            return false;
-        });
-    }, 500);
-</script>
+            .table-striped > tbody > tr:nth-child(2n+1){
+                background-color: #F9F9F9 !important;
+            }
+            #table_articles tr:hover {
+                background-color: #FEFF8F !important;
+            }
+        </style>
+        <table id="table_articles" class="table table-striped">
+            <tr>
+                <th style="text-align:center;">
+                    <a href="?by=Title&amp;sort=<?php if ($sort == 'asc') { ?>desc<?php } else { ?>asc<?php } ?>">
+                        Title&nbsp;<?php
+                        if ($orderby === 'Title') {
+                            if ($sort == 'asc') {
+                                ?>&#8595;<?php } else { ?>&#8593;<?php
+                            }
+                        }
+                        ?>
+                    </a>,
+                    <a href="?by=Id&amp;sort=<?php if ($sort == 'asc') { ?>desc<?php } else { ?>asc<?php } ?>">
+                        ID&nbsp;<?php
+                        if ($orderby === 'Id') {
+                            if ($sort == 'asc') {
+                                ?>&#8595;<?php } else { ?>&#8593;<?php
+                            }
+                        }
+                        ?>
+                    </a>
+                </th>
+                <th style="text-align:center;width:100px;">
+                    <a href="?by=Status&amp;sort=<?php if ($sort == 'asc') { ?>desc<?php } else { ?>asc<?php } ?>">
+                        Status&nbsp;<?php
+                        if ($orderby === 'Status') {
+                            if ($sort == 'asc') {
+                                ?>&#8595;<?php } else { ?>&#8593;<?php
+                            }
+                        }
+                        ?>
+                    </a>
+                </th>
+                <th style="text-align:center;width:160px;">Action</th>
+            </tr>
 
-<!-- START: File Upload Modal Dialog -->
-<div class="modal fade" id="modal_file_upload">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">
-                    Choose Image to Upload
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form name="form_upload_file" method="post" target="iframe_file_upload" action="?cmd=template-file-upload" enctype="multipart/form-data" style="margin:0px;padding:0px;">
-                    <div class="form-group">
-                        <label for="file_upload_file">
-                            File
-                        </label>
-                        <input class="input-file" name="file_upload" type="file" id="file_upload_file">
-                    </div>
-                    <div style="padding:10px;margin-top:15px;">
-                        Please note! Only image files (.png, .jpg, .gif) are allowed.
-                    </div>
-                    <input type="hidden" name="sid" value="<?php echo session_id(); ?>">
-                    <input type="hidden" name="id" value="<?php echo $template->Id; ?>">
-                </form>
-                <iframe name="iframe_file_upload" style="display:none;"></iframe>
-            </div>
-            <div class="modal-footer justify-content-between">
-                <button class="btn btn-secondary" data-bs-dismiss="modal">
-                    @include("cms::shared/icons/bootstrap/bi-chevron-left")
-                    Cancel
-                </button>
-                <button class="btn btn-success" data-dismiss="modal" onclick="$('#loading').show();
-                        form_upload_file.submit();">
-                    <span class="glyphicon glyphicon-upload"></span>
-                    Upload
-                </button>
-            </div>
-        </div>
+            <?php foreach ($templates as $template) { ?>
+                <tr>
+                    <td>
+                        <div style="color:#333;font-size: 14px;">
+                            <?php echo $template->Title; ?>
+                        </div>
+                        <div style="color:#999;font-size: 10px;">
+                            <?php echo $template->Id; ?>
+                        </div>
+                    <td style="text-align:center;vertical-align: middle;">
+                        <?php echo $template->Status; ?><br>
+                    </td>
+                    <td style="text-align:center;vertical-align: middle;">
+                        <a href="<?php echo \Sinevia\Cms\Helpers\Links::adminTemplateUpdate(['TemplateId' => $template->Id]) ?>" class="btn btn-sm btn-warning">
+                            @include("cms::shared/icons/bootstrap/bi-pencil-square")
+                            Edit
+                        </a>
+
+                        <?php if ($template->Status == 'Deleted') { ?>
+                            <button class="btn btn-sm btn-danger" onclick="confirmTemplateDelete('<?php echo $template->Id; ?>');">
+                                @include("cms::shared/icons/bootstrap/bi-x-circle")
+                                Delete
+                            </button>
+                        <?php } ?>
+
+                        <?php if ($template->Status != 'Deleted') { ?>
+                            <button class="btn btn-sm btn-danger" onclick="confirmTemplateMoveToTrash('<?php echo $template->Id; ?>');">
+                                @include("cms::shared/icons/bootstrap/bi-trash")
+                                Trash
+                            </button>
+                        <?php } ?>
+                    </td>
+                </tr>
+            <?php } ?>
+        </table>
+        <!-- END: Categories -->
+
+        <!-- START: Pagination -->
+        {!! $templates->render("cms::shared/bootstrap-5/pagination") !!}
+        <!-- END: Pagination -->
     </div>
+
 </div>
-<script>
-    function modal_file_upload_show() {
-        $('#modal_file_upload').modal('show');
-    }
-</script>
-<!-- END: File Upload Modal Dialog -->
 
 
-
-<!-- START: Add Translation -->
-<div class="modal fade" id="modal_language_add">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">
-                    Add Translation Language
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form name="form_language_add" method="post" action="<?php echo \Sinevia\Cms\Helpers\Links::adminTemplateTranslationCreate(); ?>" style="margin:0px;padding:0px;">
-                    <div class="form-group">
-                        <label for="file_upload_file">
-                            Language
-                        </label>
-                        <select name="Language" class="form-control">
-                            <?php foreach (\Sinevia\Cms\Helpers\Languages::getLanguagesAsIso1() as $iso1) { ?>
-                                <option value="<?php echo $iso1; ?>"><?php echo \Sinevia\Cms\Helpers\Languages::getLanguageByIso1($iso1); ?></option>
-                            <?php } ?>
-                        </select>
-                    </div>
-                    <div style="padding:10px;margin-top:15px;color:red;">
-                        Please save all unsaved changes you have made first!.
-                    </div>
-                    <input type="hidden" name="TemplateId" value="<?php echo $template->Id; ?>" />
-                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                </form>
-            </div>
-            <div class="modal-footer justify-content-between">
-                <button class="btn btn-secondary" data-bs-dismiss="modal">
-                    @include("cms::shared/icons/bootstrap/bi-chevron-left")
-                    Cancel
-                </button>
-                <button class="btn btn-success" data-dismiss="modal" onclick="$('#loading').show();
-                        form_language_add.submit();">
-                    @include("cms::shared/icons/bootstrap/bi-plus-circle")
-                    Add Translation
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-<script>
-    function modal_language_add_show() {
-        $('#modal_language_add').modal('show');
-    }
-</script>
-<!-- START: Add Translation -->
-
-<!-- START: Delete Translation -->
-<div class="modal fade" id="modal_language_delete">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">
-                    Delete <span class="modal_language_delete_language_name"></span> Translation
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form name="form_language_delete" method="post" action="<?php echo \Sinevia\Cms\Helpers\Links::adminTemplateTranslationDelete(); ?>" style="margin:0px;padding:0px;">
-                    <div style="padding:10px;margin-top:15px;color:red;font-weight:bold;font-size:16px;">
-                        Are you sure you want to delete <span class="modal_language_delete_language_name"></span> translation.
-                        Beware! This action cannot be reversed.
-                    </div>
-                    <input type="hidden" id="form_language_delete_language_code" name="Language" value="" />
-                    <input type="hidden" name="TemplateId" value="<?php echo $template->Id; ?>" />
-                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                </form>
-            </div>
-            <div class="modal-footer justify-content-between">
-                <button class="btn btn-info" data-bs-dismiss="modal">
-                    @include("cms::shared/icons/bootstrap/bi-chevron-left")
-                    Cancel
-                </button>
-                <button class="btn btn-warning" data-dismiss="modal" onclick="$('#loading').show();
-                        form_language_delete.submit();">
-                    @include("cms::shared/icons/bootstrap/bi-dash-circle")
-                    Delete Translation
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-<script>
-    function modal_language_delete_show(language_code, language_name) {
-        $('.modal_language_delete_language_name').html(language_name);
-        $('#form_language_delete_language_code').val(language_code);
-        $('#modal_language_delete').modal('show');
-    }
-</script>
-<!-- START: Delete Translation -->
+@include('cms::admin/template-manager/bootstrap-5/template-create-modal')
+@include('cms::admin/template-manager/bootstrap-5/template-delete-modal')
+@include('cms::admin/template-manager/bootstrap-5/template-move-trash-modal')
