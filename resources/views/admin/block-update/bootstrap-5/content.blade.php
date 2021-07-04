@@ -181,15 +181,19 @@
 <br />
 
 <script type="text/javascript">
-    $(window).keypress(function (event) {
-    if (!(event.which === 115 && event.ctrlKey) && !(event.which === 19)) {
-    return true;
-    }
-    $('#ButtonApply').trigger('click');
-            event.preventDefault();
+    setTimeout(function () {
+        $(window).bind('keydown', function (event) {
+            if (event.ctrlKey || event.metaKey) {
+                switch (String.fromCharCode(event.which).toLowerCase()) {
+                    case 's':
+                        event.preventDefault();
+                        $('#ButtonApply').trigger('click');
+                        break;
+                }
+            }
             return false;
-    });
-    }, 2000);
+        });
+    }, 500);
 </script>
 
 <!-- START: File Upload Modal Dialog -->
