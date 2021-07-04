@@ -25,8 +25,8 @@
         <form name="FORM_TEMPLATE_EDIT" action="" method="post">
 
             <!-- START: Status -->
-            <div class="form-group">
-                <label for="page_status">
+            <div class="form-group mt-3">
+                <label>
                     Status
                 </label>
                 <select class="form-control" name="Status">
@@ -46,7 +46,9 @@
 
             <!-- START: Title -->
             <div class="form-group mt-3">
-                <label>Title</label>
+                <label>
+                    Title
+                </label>
                 <input class="form-control" name="Title" type="text" value="<?php echo htmlentities($title); ?>" />
             </div>
             <!-- END: Title -->
