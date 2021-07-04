@@ -13,8 +13,6 @@
 @stop
 
 @section('webpage_content')
-
-@include('cms::shared.navigation')
 <?php if (config("cms.bootstrap-version") == 5) { ?>
     @include('cms::shared/bootstrap-5/css')
 <?php } ?>
