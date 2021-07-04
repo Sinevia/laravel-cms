@@ -3,28 +3,35 @@
         <!-- START: Filter -->
         <div class="well hidden-sm hidden-xs">
             <form class="form-inline" name="form_filter" method="get" style="margin:0px;">
-                Filter:
-                <div class="form-group">
-                    <label class="sr-only">Status</label>
-                    <select id="filter_status" name="filter_status" class="form-control" onchange="form_filter.submit();">
-                        <option value="">- Status -</option>
-                        <?php $selected = ($filterStatus != 'Draft') ? '' : ' selected="selected"'; ?>
-                        <option value="Draft" <?php echo $selected; ?>>Draft</option>
-                        <?php $selected = ($filterStatus != 'Published') ? '' : ' selected="selected"'; ?>
-                        <option value="Published" <?php echo $selected; ?>>Published</option>
-                        <?php $selected = ($filterStatus != 'Unpublished') ? '' : ' selected="selected"'; ?>
-                        <option value="Unpublished" <?php echo $selected; ?>>Unpublished</option>
-                    </select>
+                <div class="row">
+                    <div class="col-sm-1">
+                        Filter:
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label class="sr-only">Status</label>
+                            <select id="filter_status" name="filter_status" class="form-control" onchange="form_filter.submit();">
+                                <option value="">- Status -</option>
+                                <?php $selected = ($filterStatus != 'Draft') ? '' : ' selected="selected"'; ?>
+                                <option value="Draft" <?php echo $selected; ?>>Draft</option>
+                                <?php $selected = ($filterStatus != 'Published') ? '' : ' selected="selected"'; ?>
+                                <option value="Published" <?php echo $selected; ?>>Published</option>
+                                <?php $selected = ($filterStatus != 'Unpublished') ? '' : ' selected="selected"'; ?>
+                                <option value="Unpublished" <?php echo $selected; ?>>Unpublished</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <button class="btn btn-primary" title="Filter">
+                            @include("cms::shared.icons.bootstrap.bi-filter")
+                        </button>
+
+                        <button type="button" class="btn btn-primary pull-right" onclick="showTranslationCreateModal();">
+                            @include("cms::shared.icons.bootstrap.bi-plus-circle")
+                            Add Translation
+                        </button>
+                    </div>
                 </div>
-
-                <button class="btn btn-primary">
-                    <span class="glyphicon glyphicon-search"></span>
-                </button>
-
-                <button type="button" class="btn btn-primary pull-right" onclick="showTranslationCreateModal();">
-                    <span class="glyphicon glyphicon-plus-sign"></span>
-                    Add Translation
-                </button>
             </form>
         </div>
         <!-- END: Filter -->
@@ -32,16 +39,17 @@
     </div>
 
     <div class="box-body">
-
         <ul class="nav nav-tabs" style="margin-bottom: 3px;">
-            <li class="<?php if ($view == '') { ?>active<?php } ?>">
-                <a href="?view=all">
-                    <span class="glyphicon glyphicon-list"></span> Live
+            <li class="nav-item">
+                <a href="?view=all" class="nav-link <?php if ($view == '' OR $view == 'all') { ?>active<?php } ?>">
+                    @include("cms::shared/icons/bootstrap/bi-list")
+                    Live
                 </a>
             </li>
-            <li class="<?php if ($view == 'trash') { ?>active<?php } ?>">
-                <a href="?&view=trash">
-                    <span class="glyphicon glyphicon-trash"></span> Trash
+            <li class="nav-item">
+                <a href="?&view=trash" class="nav-link <?php if ($view == 'trash') { ?>active<?php } ?>">
+                    @include("cms::shared/icons/bootstrap/bi-trash")
+                    Trash
                 </a>
             </li>
         </ul>
@@ -91,14 +99,14 @@
                         ?>
                     </a>
                 </th>
-                <th style="text-align:center;width:160px;">Action</th>
+                <th style="text-align:center;width:230px;">Action</th>
             </tr>
 
             <?php foreach ($translationKeys as $translationKey) { ?>
                 <?php
                 $key = $translationKey->Key;
-                $updatedAt = date('d M Y',strtotime($translationKey->UpdatedAt));
-                $idLanguage = Sinevia\Cms\Models\TranslationValue::where('KeyId',$translationKey->Id)->get(['Language'])->toArray();
+                $updatedAt = date('d M Y', strtotime($translationKey->UpdatedAt));
+                $idLanguage = Sinevia\Cms\Models\TranslationValue::where('KeyId', $translationKey->Id)->get(['Language'])->toArray();
                 $languages = array_column($idLanguage, 'Language');
                 ?>
                 <tr>
@@ -115,12 +123,12 @@
                     </td>
                     <td style="text-align:center;vertical-align: middle;">
                         <a class="btn btn-xs btn-warning" href="<?php echo \Sinevia\Cms\Helpers\Links::adminTranslationUpdate(['TranslationId' => $translationKey['Id']]); ?>">
-                            <span class="glyphicon glyphicon-edit"></span>
+                            @include("cms::shared/icons/bootstrap/bi-pencil-square")
                             Edit
                         </a>
 
                         <button class="btn btn-xs btn-danger" onclick="confirmTranslationDelete('<?php echo $translationKey->Id; ?>');">
-                            <span class="glyphicon glyphicon-remove-sign"></span>
+                            @include("cms::shared/icons/bootstrap/bi-x-circle")
                             Delete
                         </button>
                     </td>
@@ -130,89 +138,11 @@
         <!-- END: Categories -->
 
         <!-- START: Pagination -->    
-        {!! $translationKeys->render() !!}
+        {!! $translationKeys->render("cms::shared/bootstrap-5/pagination") !!}
         <!-- END: Pagination -->
     </div>
 
 </div>
 
-
-<!-- START: Translation Create Modal Dialog -->
-<div class="modal fade" id="ModalTranslationCreate">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">×</button>
-                <h3>New Translation</h3>
-            </div>
-            <div class="modal-body">
-                <form name="FormTranslationCreate" method="post" action="<?php echo \Sinevia\Cms\Helpers\Links::adminTranslationCreate(); ?>">
-                    <div class="form-group">
-                        <label>Key</label>
-                        <input name="Key" value="" class="form-control" />
-                    </div>
-                    <?php echo csrf_field(); ?>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <a id="modal-close" href="#" class="btn btn-info pull-left" data-dismiss="modal">
-                    <span class="glyphicon glyphicon-chevron-left"></span>
-                    Cancel
-                </a>
-                <a id="modal-close" href="#" class="btn btn-success" data-dismiss="modal" onclick="FormTranslationCreate.submit();">
-                    <span class="glyphicon glyphicon-ok-circle"></span>
-                    Create translation
-                </a>
-            </div>
-        </div>
-    </div>
-</div>
-<script>
-    function showTranslationCreateModal() {
-        $('#ModalTranslationCreate').modal('show');
-    }
-</script>
-<!-- END: Translation Create Modal Dialog -->
-
-
-<!-- START: Translation Delete Modal Dialog -->
-<div class="modal fade" id="ModalTranslationDelete">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">×</button>
-                <h3>Confirm Translation Delete</h3>
-            </div>
-            <div class="modal-body">
-                <div>
-                    Are you sure you want to delete this template?
-                </div>
-                <div>
-                    Note! This action cannot be undone.
-                </div>
-
-                <form name="FormTranslationDelete" method="post" action="<?php echo \Sinevia\Cms\Helpers\Links::adminTranslationDelete(); ?>">
-                    <input type="hidden" id="template_delete_id" name="TranslationId" value="">
-                    <?php echo csrf_field(); ?>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <a id="modal-close" href="#" class="btn btn-info pull-left" data-dismiss="modal">
-                    <span class="glyphicon glyphicon-chevron-left"></span>
-                    Cancel
-                </a>
-                <a id="modal-close" href="#" class="btn btn-danger" data-dismiss="modal" onclick="FormTranslationDelete.submit();">
-                    <span class="glyphicon glyphicon-remove-sign"></span>
-                    Delete
-                </a>
-            </div>
-        </div>
-    </div>
-</div>
-<script>
-    function confirmTranslationDelete(template_id) {
-        $('#ModalTranslationDelete input[name=TranslationId]').val(template_id);
-        $('#ModalTranslationDelete').modal('show');
-    }
-</script>
-<!-- END: Translation Delete Modal Dialog -->
+@include('cms::admin/translation-manager/bootstrap-5/translation-create-modal')
+@include('cms::admin/translation-manager/bootstrap-5/translation-delete-modal')
