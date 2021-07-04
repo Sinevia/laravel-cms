@@ -7,7 +7,17 @@
 </h1>
 
 <ol class="breadcrumb">
-    <li><a href="<?php echo \Sinevia\Cms\Helpers\Links::adminHome(); ?>"><i class="fa fa-dashboard"></i> Home</a></li>
-    <li><a href="<?php echo \Sinevia\Cms\Helpers\Links::adminHome(); ?>">CMS</li>
-    <li class="active"><a href="<?php echo \Sinevia\Cms\Helpers\Links::adminTemplateManager(); ?>">Templates</li>
+    <li class="breadcrumb-item">
+        <a href="<?php echo \Sinevia\Cms\Helpers\Links::adminHome(); ?>">
+            <i class="fa fa-dashboard"></i> Home
+        </a>
+    </li>
+    <li class="breadcrumb-item">
+        <a href="<?php echo \Sinevia\Cms\Helpers\Links::adminTemplateManager(); ?>">
+            CMS
+        </a>
+    </li>
+    <li class="breadcrumb-item active">
+        Templates
+    </li>
 </ol>
