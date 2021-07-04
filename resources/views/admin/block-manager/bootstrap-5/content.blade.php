@@ -44,12 +44,14 @@
         <ul class="nav nav-tabs" style="margin-bottom: 3px;">
             <li class="nav-item">
                 <a href="?view=all" class="nav-link <?php if ($view == '' OR $view == 'all') { ?>active<?php } ?>">
-                    <span class="glyphicon glyphicon-list"></span> Live
+                    @include("cms::shared/icons/bootstrap/bi-list")
+                    Live
                 </a>
             </li>
             <li class="nav-item">
                 <a href="?&view=trash" class="nav-link <?php if ($view == 'trash') { ?>active<?php } ?>">
-                    <span class="glyphicon glyphicon-trash"></span> Trash
+                    @include("cms::shared/icons/bootstrap/bi-trash")
+                    Trash
                 </a>
             </li>
         </ul>
