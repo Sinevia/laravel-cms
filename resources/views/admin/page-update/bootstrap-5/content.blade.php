@@ -520,15 +520,18 @@
 
 <script type="text/javascript">
     setTimeout(function () {
-        $(document).keypress(function (event) {
-            if (!(event.which === 115 && event.ctrlKey) && !(event.which === 19)) {
-                return true;
+        $(window).bind('keydown', function (event) {
+            if (event.ctrlKey || event.metaKey) {
+                switch (String.fromCharCode(event.which).toLowerCase()) {
+                    case 's':
+                        event.preventDefault();
+                        $('#ButtonApply').trigger('click');
+                        break;
+                }
             }
-            $('#ButtonApply').trigger('click');
-            event.preventDefault();
             return false;
         });
-    }, 2000);
+    }, 500);
 </script>
 
 <!-- START: File Upload Modal Dialog -->
