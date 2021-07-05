@@ -171,3 +171,7 @@ return viewInTemplate('Login', $pageContent)
 ## Changelog
 
 2021.07.05 - Added support for Bootstrap 5
+
+## Alternatives
+
+- [LavaLite](https://github.com/LavaLite/cms)
