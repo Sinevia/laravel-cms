@@ -174,4 +174,5 @@ return viewInTemplate('Login', $pageContent)
 
 ## Alternatives
 
-- [LavaLite](https://github.com/LavaLite/cms)
+- [LavaLite](https://github.com/LavaLite/cms) - requires full project from scratch, cannot be embedded in existing project
+- [OctoberCms](https://github.com/octobercms/october) - requires full project from scratch, cannot be embedded in existing project
