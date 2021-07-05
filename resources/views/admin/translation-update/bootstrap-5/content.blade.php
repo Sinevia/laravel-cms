@@ -92,7 +92,7 @@
                             @include("cms::shared/icons/bootstrap/bi-plus-circle",['onclick'=>'modal_language_add_show();', 'fill'=>'green'])
                         </span>
                         <span style="display: inline-block;margin: 10px;cursor:pointer;">
-                            @include("cms::shared/icons/bootstrap/bi-dash-circle",['onclick'=>"modal_language_delete_show($(this).parent().find('select').val(), $(this).parent().find('select option:selected').text());", 'fill'=>'red'])
+                            @include("cms::shared/icons/bootstrap/bi-dash-circle",['onclick'=>"modal_language_delete_show($(this).parent().parent().find('select').val(), $(this).parent().parent().find('select option:selected').text());", 'fill'=>'red'])
                         </span>
                     </li>
                 </ul>
@@ -224,7 +224,7 @@
             <div class="modal-body">
                 <form name="form_language_delete" method="post" action="<?php echo \Sinevia\Cms\Helpers\Links::adminTranslationValueDelete(); ?>" style="margin:0px;padding:0px;">
                     <div style="padding:10px;margin-top:15px;color:red;font-weight:bold;font-size:16px;">
-                        Are you sure you want to delete <span class="modal_language_delete_language_name"></span> translation.
+                        Are you sure you want to delete the <span class="modal_language_delete_language_name"></span> translation.
                         Beware! This action cannot be reversed.
                     </div>
                     <input type="hidden" id="form_language_delete_language_code" name="Language" value="" />
@@ -246,9 +246,10 @@
         </div>
     </div>
 </div>
-
 <script>
     function modal_language_delete_show(language_code, language_name) {
+        // DEBUG: console.log(language_code);
+        // DEBUG: console.log(language_name);
         $('.modal_language_delete_language_name').html(language_name);
         $('#form_language_delete_language_code').val(language_code);
         $('#modal_language_delete').modal('show');
