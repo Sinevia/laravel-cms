@@ -1,213 +1,238 @@
-<div class="box box-primary">
-    <div class="box-header with-border">
-        <!-- START: Filter -->
-        <div class="well hidden-sm hidden-xs">
-            <form class="form-inline" name="form_filter" method="get" style="margin:0px;">
-                Filter:
-                <div class="form-group">
-                    <label class="sr-only">Status</label>
-                    <select id="filter_status" name="filter_status" class="form-control" onchange="form_filter.submit();">
-                        <option value="">- Status -</option>
-                        <?php $selected = ($filterStatus != 'Draft') ? '' : ' selected="selected"'; ?>
-                        <option value="Draft" <?php echo $selected; ?>>Draft</option>
-                        <?php $selected = ($filterStatus != 'Published') ? '' : ' selected="selected"'; ?>
-                        <option value="Published" <?php echo $selected; ?>>Published</option>
-                        <?php $selected = ($filterStatus != 'Unpublished') ? '' : ' selected="selected"'; ?>
-                        <option value="Unpublished" <?php echo $selected; ?>>Unpublished</option>
-                    </select>
-                </div>
+<div class="box box-info">
+    <div class="box-header">
+        <div>
+            <a href="<?php echo \Sinevia\Cms\Helpers\Links::adminTranslationManager(); ?>" class="btn btn-info">
+                <span class="glyphicon glyphicon-chevron-left"></span>
+                Cancel
+            </a>
 
-                <button class="btn btn-primary">
-                    <span class="glyphicon glyphicon-search"></span>
-                </button>
+            <button type="button" class="btn btn-success pull-right" style="margin:0px 10px;"  onclick="$('#form_action').val('save-and-exit');
+                    FORM_TRANSLATION_EDIT.submit();">
+                <span class="glyphicon glyphicon-floppy-saved"></span>
+                Save
+            </button>
 
-                <button type="button" class="btn btn-primary pull-right" onclick="showWidgetCreateModal();">
-                    <span class="glyphicon glyphicon-plus-sign"></span>
-                    Add Widget
-                </button>
-            </form>
+            <button type="button" class="btn btn-success pull-right" style="margin:0px 10px;" onclick="$('#form_action').val('save');
+                    FORM_TRANSLATION_EDIT.submit();">
+                <span class="glyphicon glyphicon-floppy-save"></span>
+                Apply
+            </button>
         </div>
-        <!-- END: Filter -->
-
     </div>
 
     <div class="box-body">
 
-        <ul class="nav nav-tabs" style="margin-bottom: 3px;">
-            <li class="<?php if ($view == '') { ?>active<?php } ?>">
-                <a href="?view=all">
-                    <span class="glyphicon glyphicon-list"></span> Live
-                </a>
-            </li>
-            <li class="<?php if ($view == 'trash') { ?>active<?php } ?>">
-                <a href="?&view=trash">
-                    <span class="glyphicon glyphicon-trash"></span> Trash
-                </a>
-            </li>
-        </ul>
+        <form name="FORM_TRANSLATION_EDIT" action="" method="post">
 
-        <!--START: Categories -->
-        <style scoped="scoped">
-            .table-striped > tbody > tr:nth-child(2n+1) > td{
-                background-color: transparent !important;
-            }
-            .table-striped > tbody > tr:nth-child(2n+1){
-                background-color: #F9F9F9 !important;
-            }
-            #table_articles tr:hover {
-                background-color: #FEFF8F !important;
-            }
-        </style>
-        <table id="table_articles" class="table table-striped">
-            <tr>
-                <th style="text-align:center;">
-                    <a href="?by=Title&amp;sort=<?php if ($sort == 'asc') { ?>desc<?php } else { ?>asc<?php } ?>">
-                        Title&nbsp;<?php
-                        if ($orderby === 'Title') {
-                            if ($sort == 'asc') {
-                                ?>&#8595;<?php } else { ?>&#8593;<?php
-                            }
-                        }
-                        ?>
-                    </a>,
-                    <a href="?by=Id&amp;sort=<?php if ($sort == 'asc') { ?>desc<?php } else { ?>asc<?php } ?>">
-                        ID&nbsp;<?php
-                        if ($orderby === 'Id') {
-                            if ($sort == 'asc') {
-                                ?>&#8595;<?php } else { ?>&#8593;<?php
-                            }
-                        }
-                        ?>
-                    </a>
-                </th>
-                <th style="text-align:center;width:100px;">
-                    <a href="?by=Status&amp;sort=<?php if ($sort == 'asc') { ?>desc<?php } else { ?>asc<?php } ?>">
-                        Status&nbsp;<?php
-                        if ($orderby === 'Status') {
-                            if ($sort == 'asc') {
-                                ?>&#8595;<?php } else { ?>&#8593;<?php
-                            }
-                        }
-                        ?>
-                    </a>
-                </th>
-                <th style="text-align:center;width:160px;">Action</th>
-            </tr>
-
-            <?php foreach ($widgets as $widget) { ?>
-                <tr>
-                    <td>
-                        <div style="color:#333;font-size: 14px;">
-                            <?php echo $widget->Title; ?>
-                        </div>
-                        <div style="color:#999;font-size: 10px;">
-                            <?php echo $widget->Id; ?>
-                        </div>
-                    <td style="text-align:center;vertical-align: middle;">
-                        <?php echo $widget->Status; ?><br>
-                    </td>
-                    <td style="text-align:center;vertical-align: middle;">
-                        <a href="<?php echo \Sinevia\Cms\Helpers\Links::adminWidgetUpdate(['WidgetId'=>$widget->Id]); ?>" class="btn btn-sm btn-warning">
-                            <span class="glyphicon glyphicon-edit"></span>
-                            Edit
-                        </a>
-                        <button class="btn btn-sm btn-danger" onclick="confirmWidgetDelete('<?php echo $widget->Id; ?>');">
-                            <span class="glyphicon glyphicon-remove-sign"></span>
-                            Delete
-                        </button>
-                    </td>
-                </tr>
-            <?php } ?>
-        </table>
-        <!-- END: Categories -->
-
-        <!-- START: Pagination -->
-        <?php echo $widgets->render(); ?>
-        <!-- END: Pagination -->
-    </div>
-
-</div>
-
-<!-- START: Widget Create Modal Dialog -->
-<div class="modal fade" id="ModalWidgetCreate">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">×</button>
-                <h3>New Widget</h3>
+            <!-- START: Key -->
+            <div class="form-group">
+                <label>Key</label>
+                <input class="form-control" name="Key" type="text" value="<?php echo htmlentities($key); ?>" />
             </div>
-            <div class="modal-body">
-                <form name="FormWidgetCreate" method="post" action="<?php echo \Sinevia\Cms\Helpers\Links::adminWidgetCreate(); ?>">
-                    <div class="form-group">
-                        <label>Title</label>
-                        <input name="Title" value="" class="form-control" />
+            <!-- END: Key -->
+
+
+            <!-- START: Code Mirror -->
+            <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/codemirror/3.20.0/codemirror.min.css" />
+            <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/codemirror/3.20.0/codemirror.min.js"></script>
+            <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/codemirror/3.20.0/mode/xml/xml.min.js"></script>
+            <script src="//cdnjs.cloudflare.com/ajax/libs/codemirror/3.20.0/mode/htmlmixed/htmlmixed.min.js"></script>
+            <script src="//cdnjs.cloudflare.com/ajax/libs/codemirror/3.20.0/mode/javascript/javascript.js"></script>
+            <script src="//cdnjs.cloudflare.com/ajax/libs/codemirror/3.20.0/mode/css/css.js"></script>
+            <script src="//cdnjs.cloudflare.com/ajax/libs/codemirror/3.20.0/mode/clike/clike.min.js"></script>
+            <script src="//cdnjs.cloudflare.com/ajax/libs/codemirror/3.20.0/mode/php/php.min.js"></script>
+            <script src="//cdnjs.cloudflare.com/ajax/libs/codemirror/2.36.0/formatting.min.js"></script>
+            <script src="//cdnjs.cloudflare.com/ajax/libs/codemirror/3.22.0/addon/edit/matchbrackets.min.js"></script>
+
+            <style>
+                .CodeMirror {
+                    border: 1px solid #eee;
+                    height: auto;
+                }
+            </style>
+            <script>
+                $(function () {
+                    $('.translation_content').each(function () {
+                        var editor = CodeMirror.fromTextArea(this, {
+                            lineNumbers: true,
+                            matchBrackets: true,
+                            mode: "application/x-httpd-php",
+                            indentUnit: 4,
+                            indentWithTabs: true,
+                            enterMode: "keep", tabMode: "shift"
+                        });
+                    });
+                });
+            </script>
+            <!-- END: Code Mirror -->
+
+            <!-- START: Content -->
+            <div class="form-group">
+                <label for="translationKey_content">
+                    Content
+                </label>
+                <ul class="nav nav-tabs">
+                    <li class="active"><a href="#">Content</a></li>
+                    <li class="dropdown">
+                        <select class="form-control" onchange="showTranslationContent(this.value);" style="float:left;display: inline;float: left;width: 115px;">
+                            <?php foreach ($translationValues as $tr) { ?>
+                                <?php $language = $tr['Language']; ?>
+                                <?php $selected = ($language == 'en') ? 'selected="selected"' : ''; ?>
+                                <option value="<?php echo $language; ?>" <?php echo $selected; ?>>
+                                    <?php echo \Sinevia\Cms\Helpers\Languages::getLanguageByIso1($language); ?>
+                                </option>
+                            <?php } ?>
+                        </select>
+                        <span class="glyphicon glyphicon-plus-sign" onclick="modal_language_add_show();" style="color:green;margin: 10px;cursor:pointer;"></span>
+                        <span class="glyphicon glyphicon-minus-sign" onclick="modal_language_delete_show($(this).parent().find('select').val(), $(this).parent().find('select option:selected').text());" style="color:red;margin: 10px 5px;cursor:pointer;"></span>
+                    </li>
+                </ul>
+                <?php foreach ($translationValues as $tr) { ?>
+                    <?php $language = $tr['Language']; ?>
+                    <?php $display = ($language == 'en') ? '' : 'display:none;'; ?>
+                    <div class="translation_content_translation" id="translation_content_translation_<?php echo $language; ?>" style="min-height:50px;<?php echo $display; ?>">
+                        <textarea class="form-control translation_content" name="Content[<?php echo $language; ?>]" style="height:300px;width:100%;"><?php echo htmlentities($tr['Value']); ?></textarea>
                     </div>
-                    <?php echo csrf_field(); ?>
-                </form>
+                <?php } ?>
+                <script>
+                    function showTranslationContent(language) {
+                        $('.translation_content_translation').hide();
+                        $('#translation_content_translation_' + language).show();
+                    }
+                </script>
+
             </div>
-            <div class="modal-footer">
-                <a id="modal-close" href="#" class="btn btn-info pull-left" data-dismiss="modal">
-                    <span class="glyphicon glyphicon-chevron-left"></span>
-                    Cancel
-                </a>
-                <a id="modal-close" href="#" class="btn btn-success" data-dismiss="modal" onclick="FormWidgetCreate.submit();">
-                    <span class="glyphicon glyphicon-ok-circle"></span>
-                    Create widget
-                </a>
-            </div>
-        </div>
+            <!-- END: Content -->
+
+            <input type="hidden" name="_token" value="{{ csrf_token() }}">
+            <input type="hidden" name="action" id="form_action" value="save-and-exit">
+        </form>
+
     </div>
+
+    <div class="box box-footer">
+        <a href="<?php echo \Sinevia\Cms\Helpers\Links::adminTranslationManager(); ?>" class="btn btn-info">
+            <span class="glyphicon glyphicon-chevron-left"></span>
+            Cancel
+        </a>
+
+        <button type="button" class="btn btn-success pull-right" style="margin:0px 10px;"  onclick="$('#form_action').val('save-and-exit');
+                FORM_TRANSLATION_EDIT.submit();">
+            <span class="glyphicon glyphicon-floppy-saved"></span>
+            Save
+        </button>
+
+        <button type="button" id="ButtonApply" class="btn btn-success pull-right" style="margin:0px 10px;" onclick="$('#form_action').val('save');
+                FORM_TRANSLATION_EDIT.submit();">
+            <span class="glyphicon glyphicon-floppy-save"></span>
+            Apply
+        </button>
+    </div>
+
+
 </div>
-<script>
-    function showWidgetCreateModal() {
-        $('#ModalWidgetCreate').modal('show');
-    }
+
+<br />
+<br />
+<br />
+
+<script type="text/javascript">
+    $(window).keypress(function (event) {
+        if (!(event.which === 115 && event.ctrlKey) && !(event.which === 19)) {
+            return true;
+        }
+        $('#ButtonApply').trigger('click');
+        event.preventDefault();
+        return false;
+    });
 </script>
-<!-- END: Widget Create Modal Dialog -->
 
-
-<!-- START: Widget Delete Modal Dialog -->
-<div class="modal fade" id="ModalWidgetDelete">
+<!-- START: Add Translation -->
+<div class="modal fade" id="modal_language_add">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">×</button>
-                <h3>Confirm Widget Delete</h3>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Add Translation Language</h4>
             </div>
             <div class="modal-body">
-                <div>
-                    Are you sure you want to delete this template?
-                </div>
-                <div>
-                    Note! This action cannot be undone.
-                </div>
-
-                <form name="FormWidgetDelete" method="post" action="<?php echo \Sinevia\Cms\Helpers\Links::adminWidgetDelete(); ?>">
-                    <input type="hidden" id="template_delete_id" name="WidgetId" value="">
-                    <?php echo csrf_field(); ?>
+                <form name="form_language_add" method="post" action="<?php echo \Sinevia\Cms\Helpers\Links::adminTranslationValueCreate(); ?>" style="margin:0px;padding:0px;">
+                    <div class="form-group">
+                        <label for="file_upload_file">
+                            Language
+                        </label>
+                        <select name="Language" class="form-control">
+                            <?php foreach (\Sinevia\Cms\Helpers\Languages::getLanguagesAsIso1() as $iso1) { ?>
+                                <option value="<?php echo $iso1; ?>"><?php echo \Sinevia\Cms\Helpers\Languages::getLanguageByIso1($iso1); ?></option>
+                            <?php } ?>
+                        </select>
+                    </div>
+                    <div style="padding:10px;margin-top:15px;color:red;">
+                        Please save all unsaved changes you have made first!.
+                    </div>
+                    <input type="hidden" name="KeyId" value="<?php echo $translationKey->Id; ?>" />
+                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
                 </form>
             </div>
             <div class="modal-footer">
-                <a id="modal-close" href="#" class="btn btn-info pull-left" data-dismiss="modal">
+                <button class="btn btn-info pull-left" data-dismiss="modal">
                     <span class="glyphicon glyphicon-chevron-left"></span>
                     Cancel
-                </a>
-                <a id="modal-close" href="#" class="btn btn-danger" data-dismiss="modal" onclick="FormWidgetDelete.submit();">
-                    <span class="glyphicon glyphicon-remove-sign"></span>
-                    Delete
-                </a>
+                </button>
+                <button class="btn btn-success" data-dismiss="modal" onclick="$('#loading').show();
+                        form_language_add.submit();">
+                    <span class="glyphicon glyphicon-plus-sign"></span>
+                    Add Translation
+                </button>
             </div>
         </div>
     </div>
 </div>
 <script>
-    function confirmWidgetDelete(template_id) {
-        $('#template_delete_id').val(template_id);
-        $('#ModalWidgetDelete').modal('show');
+    function modal_language_add_show() {
+        $('#modal_language_add').modal('show');
     }
 </script>
-<!-- END: Widget Delete Modal Dialog -->
+<!-- START: Add Translation -->
 
-<br />
-<br />
-<br />
+<!-- START: Delete Translation -->
+<div class="modal fade" id="modal_language_delete">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Delete <span class="modal_language_delete_language_name"></span> Translation</h4>
+            </div>
+            <div class="modal-body">
+                <form name="form_language_delete" method="post" action="<?php echo \Sinevia\Cms\Helpers\Links::adminTranslationValueDelete(); ?>" style="margin:0px;padding:0px;">
+                    <div style="padding:10px;margin-top:15px;color:red;font-weight:bold;font-size:16px;">
+                        Are you sure you want to delete <span class="modal_language_delete_language_name"></span> translation.
+                        Beware! This action cannot be reversed.
+                    </div>
+                    <input type="hidden" id="form_language_delete_language_code" name="Language" value="" />
+                    <input type="hidden" name="KeyId" value="<?php echo $translationKey->Id; ?>" />
+                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-info pull-left" data-dismiss="modal">
+                    <span class="glyphicon glyphicon-chevron-left"></span>
+                    Cancel
+                </button>
+                <button class="btn btn-warning" data-dismiss="modal" onclick="$('#loading').show();
+                        form_language_delete.submit();">
+                    <span class="glyphicon glyphicon-remove-sign"></span>
+                    Delete Translation
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function modal_language_delete_show(language_code, language_name) {
+        $('.modal_language_delete_language_name').html(language_name);
+        $('#form_language_delete_language_code').val(language_code);
+        $('#modal_language_delete').modal('show');
+    }
+</script>
+<!-- START: Delete Translation -->
