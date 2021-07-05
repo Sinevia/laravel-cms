@@ -117,7 +117,7 @@
                     </td>
                     <td style="text-align:center;vertical-align: middle;">
                         <a href="<?php echo \Sinevia\Cms\Helpers\Links::adminWidgetUpdate(['WidgetId' => $widget->Id]); ?>" class="btn btn-sm btn-warning">
-                            <span class="glyphicon glyphicon-edit"></span>
+                            @include("cms::shared/icons/bootstrap/bi-pencil-square")
                             Edit
                         </a>
                         <button class="btn btn-sm btn-danger" onclick="confirmWidgetDelete('<?php echo $widget->Id; ?>');">
