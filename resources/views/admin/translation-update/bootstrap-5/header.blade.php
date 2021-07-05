@@ -1,27 +1,28 @@
-<h1>
-    Widget Manager
+<section class="content-header">
+    <h1>
+        Edit Translation: <?php echo $translationKey->Title; ?>
+        <small>(#<?php echo $translationKey->Id; ?>)</small>
+    </h1>
     
-    <button type="button" class="btn btn-primary pull-right" onclick="showWidgetCreateModal();">
-        @include("cms::shared.icons.bootstrap.bi-plus-circle")
-        Add Widget
-    </button>
-</h1>
-
-<ol class="breadcrumb">    
-    <li class="breadcrumb-item">
-        <a href="<?php echo \Sinevia\Cms\Helpers\Links::adminHome(); ?>">
-            <i class="fa fa-dashboard"></i> 
-            Home
-        </a>
-    </li>
-    <li class="breadcrumb-item">
-        <a href="<?php echo \Sinevia\Cms\Helpers\Links::adminHome(); ?>">
-            CMS
-        </a>
-    </li>
-    <li class="breadcrumb-item active">
-        <a href="<?php echo \Sinevia\Cms\Helpers\Links::adminWidgetManager(); ?>">
-            Widgets
-        </a>
-    </li>
-</ol>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="<?php echo \Sinevia\Cms\Helpers\Links::adminHome(); ?>">
+                <i class="fa fa-dashboard"></i>
+                Home
+            </a>
+        </li>
+        <li class="breadcrumb-item">
+            <a href="<?php echo \Sinevia\Cms\Helpers\Links::adminHome(); ?>">
+                CMS
+            </a>
+        </li>
+        <li class="breadcrumb-item">
+            <a href="<?php echo \Sinevia\Cms\Helpers\Links::adminTranslationManager(); ?>">
+                Translations
+            </a>
+        </li>
+        <li class="breadcrumb-item active">
+            Edit Translation
+        </li>
+    </ol>
+</section>
