@@ -1,7 +1,8 @@
 <h1>
     Block Manager
+    
     <button type="button" class="btn btn-primary pull-right" onclick="showBlockCreateModal();">
-        <span class="glyphicon glyphicon-plus-sign"></span>
+        @include("cms::shared.icons.bootstrap.bi-plus-circle")
         Add Block
     </button>
 </h1>
@@ -9,7 +10,7 @@
 <ol class="breadcrumb">
     <li class="breadcrumb-item">
         <a href="<?php echo \Sinevia\Cms\Helpers\Links::adminHome(); ?>">
-            <i class="fa fa-dashboard"></i>
+            @include("cms::shared.icons.bootstrap.bi-house")
             Home
         </a>
     </li>
