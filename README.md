@@ -181,3 +181,4 @@ return viewInTemplate('Login', $pageContent)
 - [Laravel8SimpleCms](https://github.com/ozdemirburak/laravel-8-simple-cms)  - requires full project from scratch, cannot be embedded in existing project as package
 - [Winter](https://github.com/wintercms/winter)  - requires full project from scratch, cannot be embedded in existing project as package
 - [GraphiteInc CMS](https://github.com/GrafiteInc/CMS) - Archived
+- [Twil](https://github.com/area17/twill)
