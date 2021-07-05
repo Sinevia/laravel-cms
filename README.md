@@ -168,3 +168,6 @@ return viewInTemplate('Login', $pageContent)
 ![Alt text](screenshots/005_SpeedTest.png?raw=true "CMS. Speed Test")
 
 
+## Changelog
+
+2021.07.05 - Added support for Bootstrap 5
