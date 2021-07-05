@@ -2,10 +2,11 @@
     Edit Page: <?php echo $page->Title; ?>
     <small>(<?php echo $page->Status; ?>)</small>
 </h1>
+
 <ol class="breadcrumb">
     <li class="breadcrumb-item">
         <a href="<?php echo \Sinevia\Cms\Helpers\Links::adminHome(); ?>">
-            <i class="fa fa-dashboard"></i>
+            @include("cms::shared.icons.bootstrap.bi-house")
             Home
         </a>
     </li>
