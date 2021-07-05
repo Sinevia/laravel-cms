@@ -174,7 +174,8 @@ return viewInTemplate('Login', $pageContent)
 
 ## Alternatives
 
-- [LavaLite](https://github.com/LavaLite/cms) - requires full project from scratch, cannot be embedded in existing project
-- [OctoberCms](https://github.com/octobercms/october) - requires full project from scratch, cannot be embedded in existing project
-- [TypiCms](https://github.com/TypiCMS/Base) - requires full project from scratch, cannot be embedded in existing project
-- [PyroCMS](https://github.com/pyrocms/pyrocms) - requires full project from scratch, cannot be embedded in existing project
+- [LavaLite](https://github.com/LavaLite/cms) - requires full project from scratch, cannot be embedded in existing project as package
+- [OctoberCms](https://github.com/octobercms/october) - requires full project from scratch, cannot be embedded in existing project as package
+- [TypiCms](https://github.com/TypiCMS/Base) - requires full project from scratch, cannot be embedded in existing project as package
+- [PyroCMS](https://github.com/pyrocms/pyrocms) - requires full project from scratch, cannot be embedded in existing project as package
+- [Laravel8SimpleCms](https://github.com/ozdemirburak/laravel-8-simple-cms)  - requires full project from scratch, cannot be embedded in existing project as package
