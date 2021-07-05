@@ -176,3 +176,5 @@ return viewInTemplate('Login', $pageContent)
 
 - [LavaLite](https://github.com/LavaLite/cms) - requires full project from scratch, cannot be embedded in existing project
 - [OctoberCms](https://github.com/octobercms/october) - requires full project from scratch, cannot be embedded in existing project
+- [TypiCms](https://github.com/TypiCMS/Base) - requires full project from scratch, cannot be embedded in existing project
+- [PyroCMS](https://github.com/pyrocms/pyrocms) - requires full project from scratch, cannot be embedded in existing project
