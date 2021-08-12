@@ -221,9 +221,9 @@
                         event.preventDefault();
                         $('#ButtonApply').trigger('click');
                         break;
+                }
+                return false;
             }
-            }
-            return false;
         });
     }, 500);
 </script>
