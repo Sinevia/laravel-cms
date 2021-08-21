@@ -527,8 +527,7 @@
                         event.preventDefault();
                         $('#ButtonApply').trigger('click');
                         break;
-                }        
-                return false;
+                }
             }
         });
     }, 500);
