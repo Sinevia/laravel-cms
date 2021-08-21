@@ -156,7 +156,6 @@
                         $('#ButtonApply').trigger('click');
                         break;
                 }
-                return false;
             }
         });
     }, 500);
