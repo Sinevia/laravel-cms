@@ -26,7 +26,7 @@
                     @include("cms::shared/icons/bootstrap/bi-chevron-left")
                     Cancel
                 </button>
-                <button type="button" class="btn btn-danger" onclick="FORM_PAGE_DELETE.submit();">
+                <button type="button" class="btn btn-danger" onclick="FormBlockDelete.submit();">
                     @include("cms::shared/icons/bootstrap/bi-x-circle")
                     Delete
                 </a>
