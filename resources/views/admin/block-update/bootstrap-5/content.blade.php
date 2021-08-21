@@ -7,13 +7,13 @@
             </a>
 
             <button type="button" class="btn btn-success float-end" style="margin:0px 10px;"  onclick="$('#form_action').val('save-and-exit');
-                    FORM_TEMPLATE_EDIT.submit();">
+                    FORM_BLOCK_EDIT.submit();">
                 @include("cms::shared/icons/bootstrap/bi-check-all")
                 Save
             </button>
 
             <button type="button" class="btn btn-success float-end" style="margin:0px 10px;" onclick="$('#form_action').val('save');
-                    FORM_TEMPLATE_EDIT.submit();">
+                    FORM_BLOCK_EDIT.submit();">
                 @include("cms::shared/icons/bootstrap/bi-check")
                 Apply
             </button>
@@ -22,7 +22,7 @@
 
     <div class="box-body">
 
-        <form name="FORM_TEMPLATE_EDIT" action="" method="post">
+        <form name="FORM_BLOCK_EDIT" action="" method="post">
 
             <!-- START: Status -->
             <div class="form-group mt-3">
@@ -160,13 +160,13 @@
         </a>
 
         <button type="button" class="btn btn-success float-end" style="margin:0px 10px;"  onclick="$('#form_action').val('save-and-exit');
-                FORM_TEMPLATE_EDIT.submit();">
+                FORM_BLOCK_EDIT.submit();">
             @include("cms::shared/icons/bootstrap/bi-check-all")
             Save
         </button>
 
         <button type="button" id="ButtonApply" class="btn btn-success float-end" style="margin:0px 10px;" onclick="$('#form_action').val('save');
-                FORM_TEMPLATE_EDIT.submit();">
+                FORM_BLOCK_EDIT.submit();">
             @include("cms::shared/icons/bootstrap/bi-check")
             Apply
         </button>
@@ -189,8 +189,7 @@
                         event.preventDefault();
                         $('#ButtonApply').trigger('click');
                         break;
-                }         
-                return false;
+                }
             }
         });
     }, 500);
