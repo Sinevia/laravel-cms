@@ -14,7 +14,7 @@ class Page extends BaseModel {
     public function createVersion() {
         $pageWithTranslationsArray = $this->toArray();
         $version = Version::createVersion('CmsPage', $this->Id, $pageWithTranslationsArray);
-        if(is_null($version)==false){
+        if (is_null($version) == false) {
             return true;
         }
         return false;
@@ -30,6 +30,38 @@ class Page extends BaseModel {
 
     public function url() {
         return self::getUrl($this);
+    }
+
+    public function getMetaDescription() {
+        return $this->MetaDescription;
+    }
+    
+    public function getMetaKeywords() {
+        return $this->MetaKeywords;
+    }
+    
+    public function getCanonicalUrl() {
+        return $this->CanonicalUrl;
+    }
+    
+    public function getMetaRobots() {
+        return $this->MetaRobots;
+    }
+    
+    public function getContent($language = "en") {
+        $pageTranslation = $this->translation($language);
+        if ($pageTranslation == null) {
+            return "";
+        }
+        return $pageTranslation->Content;
+    }
+    
+    public function getTitle($language = "en") {
+        $pageTranslation = $this->translation($language);
+        if ($pageTranslation == null) {
+            return "";
+        }
+        return $pageTranslation->Title;
     }
 
     /**
