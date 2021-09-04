@@ -1,5 +1,6 @@
 <?php
 $blockCount = \Sinevia\Cms\Models\Block::where('Status', '<>', 'Deleted')->count();
+$menuCount = \Sinevia\Cms\Models\Menu::where('Status', '<>', 'Deleted')->count();
 $pageCount = \Sinevia\Cms\Models\Page::where('Status', '<>', 'Deleted')->count();
 $templateCount = \Sinevia\Cms\Models\Template::where('Status', '<>', 'Deleted')->count();
 $translationCount = \Sinevia\Cms\Models\TranslationValue::count();
