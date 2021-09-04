@@ -9,14 +9,14 @@
             </div>
             <div class="modal-body">
                 <div>
-                    Are you sure you want to delete this page?
+                    Are you sure you want to delete this menu?
                 </div>
                 
                 <div class="text-danger">
                     Note! This action cannot be undone.
                 </div>
 
-                <form name="FORM_PAGE_DELETE" method="post" action="<?php echo \Sinevia\Cms\Helpers\Links::adminMenuDelete(); ?>">
+                <form name="FORM_MENU_DELETE" method="post" action="<?php echo \Sinevia\Cms\Helpers\Links::adminMenuDelete(); ?>">
                     <input type="hidden" name="menu_id" value="">
                     <?php echo csrf_field(); ?>
                 </form>
@@ -26,7 +26,7 @@
                     @include("cms::shared/icons/bootstrap/bi-chevron-left")
                     Close
                 </button>
-                <button type="button" class="btn btn-danger" onclick="FORM_PAGE_DELETE.submit();">
+                <button type="button" class="btn btn-danger" onclick="FORM_MENU_DELETE.submit();">
                     @include("cms::shared/icons/bootstrap/bi-x-circle")
                     Delete
                 </button>
@@ -36,8 +36,8 @@
 </div>
 
 <script>
-    function confirmMenuDelete(page_id) {
-        $('#ModalMenuDelete input[name=MenuId]').val(page_id);
+    function confirmMenuDelete(menu_id) {
+        $('#ModalMenuDelete input[name=menu_id]').val(menu_id);
         $('#ModalMenuDelete').modal('show');
     }
 </script>
