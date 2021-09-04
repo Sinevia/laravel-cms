@@ -20,6 +20,7 @@ class TranslationValue extends BaseModel {
                 $table->text('Value')->nullable()->default(null);
                 $table->datetime('CreatedAt')->nullable()->default(null);
                 $table->datetime('UpdatedAt')->nullable()->default(null);
+                $table->datetime('DeletedAt')->nullable()->default(null);
             });
         }
 
