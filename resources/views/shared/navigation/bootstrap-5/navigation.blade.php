@@ -29,6 +29,12 @@
                 </a>
             </li>
             <li class="nav-item">
+                <a class="nav-link" href="<?php echo \Sinevia\Cms\Helpers\Links::adminMenuManager(); ?>">
+                    Menus
+                    <span class="badge bg-secondary"><?php echo $menuCount; ?></span>
+                </a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link" href="<?php echo \Sinevia\Cms\Helpers\Links::adminTranslationManager(); ?>">
                     Translations
                     <span class="badge bg-secondary"><?php echo $translationCount; ?></span>
