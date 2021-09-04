@@ -8,7 +8,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form name="FORM_PAGE_CREATE" method="POST" action="<?php echo \Sinevia\Cms\Helpers\Links::adminMenuCreate(); ?>">
+                <form name="FORM_MENU_CREATE" method="POST" action="<?php echo \Sinevia\Cms\Helpers\Links::adminMenuCreate(); ?>">
                     <div class="form-group">
                         <label>Title</label>
                         <input class="form-control" name="title" value="" placeholder="Enter menu title" />
@@ -21,7 +21,7 @@
                     @include("cms::shared/icons/bootstrap/bi-chevron-left")
                     Close
                 </button>
-                <button type="button" class="btn btn-success" onclick="FORM_PAGE_CREATE.submit();">
+                <button type="button" class="btn btn-success" onclick="FORM_MENU_CREATE.submit();">
                     @include("cms::shared/icons/bootstrap/bi-check-circle")
                     Create menu and edit
                 </button>
