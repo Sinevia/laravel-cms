@@ -9,10 +9,10 @@
             </div>
             <div class="modal-body">
                 <div>
-                    Are you sure you want to move this page to trash?
+                    Are you sure you want to move this menu to trash?
                 </div>
 
-                <form name="FORM_PAGE_MOVE_TO_TRASH" method="post" action="<?php echo \Sinevia\Cms\Helpers\Links::adminMenuMoveToTrash(); ?>">
+                <form name="FORM_MENU_MOVE_TO_TRASH" method="post" action="<?php echo \Sinevia\Cms\Helpers\Links::adminMenuMoveToTrash(); ?>">
                     <input type="hidden" name="menu_id" value="">
                     <?php echo csrf_field(); ?>
                 </form>
@@ -22,7 +22,7 @@
                     @include("cms::shared/icons/bootstrap/bi-chevron-left")
                     Close
                 </button>
-                <button type="button" class="btn btn-warning" onclick="FORM_PAGE_MOVE_TO_TRASH.submit();">
+                <button type="button" class="btn btn-warning" onclick="FORM_MENU_MOVE_TO_TRASH.submit();">
                     @include("cms::shared/icons/bootstrap/bi-trash")
                     Move to Trash
                 </button>
@@ -32,8 +32,8 @@
 </div>
 
 <script>
-    function confirmMenuMoveToTrash(pageId) {
-        $('#ModalMenuMoveToTrash input[name=MenuId]').val(pageId);
+    function confirmMenuMoveToTrash(menuId) {
+        $('#ModalMenuMoveToTrash input[name=menu_id]').val(menuId);
         $('#ModalMenuMoveToTrash').modal('show');
     }
 </script>
