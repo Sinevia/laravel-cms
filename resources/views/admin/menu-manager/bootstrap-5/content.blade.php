@@ -13,11 +13,11 @@
                             <select id="filter_status" name="filter_status" class="form-control" onchange="form_filter.submit();">
                                 <option value="">- Status -</option>
                                 <?php $selected = ($filterStatus != 'draft') ? '' : ' selected="selected"'; ?>
-                                <option value="draft" <?php echo $selected; ?>>Draft</option>
+                                <option value="Draft" <?php echo $selected; ?>>Draft</option>
                                 <?php $selected = ($filterStatus != 'active') ? '' : ' selected="selected"'; ?>
-                                <option value="published" <?php echo $selected; ?>>Published</option>
+                                <option value="Published" <?php echo $selected; ?>>Published</option>
                                 <?php $selected = ($filterStatus != 'disabled') ? '' : ' selected="selected"'; ?>
-                                <option value="unpublished" <?php echo $selected; ?>>Unpublished</option>
+                                <option value="Unpublished" <?php echo $selected; ?>>Unpublished</option>
                             </select>
                         </div>
                     </div>
@@ -118,36 +118,36 @@
                 <tr>
                     <td>
                         <div style="color:#333;font-size: 14px;font-weight:bold;">
-                            <?php echo $menu->title; ?>
+                            <?php echo $menu->Title; ?>
                         </div>
                         <div style="color:#999;font-size: 10px;">
-                            ref. <?php echo $menu->id; ?>
+                            ref. <?php echo $menu->Id; ?>
                         </div>
                     <td style="text-align:center;vertical-align: middle;">
-                        <?php echo ucfirst($menu['status']); ?><br>
+                        <?php echo ucfirst($menu['Status']); ?><br>
                     </td>
                     <td style="text-align:center;">
                         {{ $menuItemsCount }}
                         <br />
-                        <a href="<?php echo \Sinevia\Cms\Helpers\Links::adminMenuitemManager(['menu_id' => $menu['id']]); ?>" style="text-decoration:underline;">
+                        <a href="<?php echo \Sinevia\Cms\Helpers\Links::adminMenuitemManager(['menu_id' => $menu['Id']]); ?>" style="text-decoration:underline;">
                             Manage
                         </a>
                     </td>
                     <td style="text-align:center;vertical-align: middle;">
-                        <a href="<?php echo \Sinevia\Cms\Helpers\Links::adminMenuUpdate(['menu_id' => $menu['id']]); ?>" class="btn btn-sm btn-warning">
+                        <a href="<?php echo \Sinevia\Cms\Helpers\Links::adminMenuUpdate(['menu_id' => $menu['Id']]); ?>" class="btn btn-sm btn-warning">
                             @include("cms::shared/icons/bootstrap/bi-pencil-square")
                             Edit
                         </a>
 
-                        <?php if ($menu->status == \Sinevia\Cms\Models\Menu::STATUS_DELETED) { ?>
-                            <button class="btn btn-sm btn-danger" onclick="confirmMenuDelete('<?php echo $menu->id; ?>');">
+                        <?php if ($menu->Status == \Sinevia\Cms\Models\Menu::STATUS_DELETED) { ?>
+                            <button class="btn btn-sm btn-danger" onclick="confirmMenuDelete('<?php echo $menu->Id; ?>');">
                                 @include("cms::shared/icons/bootstrap/bi-x-circle")
                                 Delete
                             </button>
                         <?php } ?>
 
-                        <?php if ($menu->status != \Sinevia\Cms\Models\Menu::STATUS_DELETED) { ?>
-                            <button class="btn btn-sm btn-danger" onclick="confirmMenuMoveToTrash('<?php echo $menu->id; ?>');">
+                        <?php if ($menu->Status != \Sinevia\Cms\Models\Menu::STATUS_DELETED) { ?>
+                            <button class="btn btn-sm btn-danger" onclick="confirmMenuMoveToTrash('<?php echo $menu->Id; ?>');">
                                 @include("cms::shared/icons/bootstrap/bi-trash")
                                 Trash
                             </button>
