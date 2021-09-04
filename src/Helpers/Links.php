@@ -44,6 +44,38 @@ class Links {
         return action('\Sinevia\Cms\Http\Controllers\CmsController@postBlockTranslationDelete') . self::buildQueryString($queryData);
     }
 
+    public static function adminMenuCreate($queryData = []) {
+        return action('\Sinevia\Cms\Http\Controllers\CmsController@postMenuCreate') . self::buildQueryString($queryData);
+    }
+
+    public static function adminMenuDelete($queryData = []) {
+        return action('\Sinevia\Cms\Http\Controllers\CmsController@postMenuDelete') . self::buildQueryString($queryData);
+    }
+
+    public static function adminMenuUpdate($queryData = []) {
+        return action('\Sinevia\Cms\Http\Controllers\CmsController@postMenuUpdate') . self::buildQueryString($queryData);
+    }
+
+    public static function adminMenuitemManager($queryData = []) {
+        return action('\Sinevia\Cms\Http\Controllers\CmsController@getMenuitemManager') . self::buildQueryString($queryData);
+    }
+
+    public static function adminMenuitemsFetchAjax($queryData = []) {
+        return action('\Sinevia\Cms\Http\Controllers\CmsController@anyMenuitemsFetchAjax') . self::buildQueryString($queryData);
+    }
+
+    public static function adminMenuitemsSaveAjax($queryData = []) {
+        return action('\Sinevia\Cms\Http\Controllers\CmsController@anyMenuitemsSaveAjax') . self::buildQueryString($queryData);
+    }
+
+    public static function adminMenuManager($queryData = []) {
+        return action('\Sinevia\Cms\Http\Controllers\CmsController@getMenuManager') . self::buildQueryString($queryData);
+    }
+
+    public static function adminMenuMoveToTrash($queryData = []) {
+        return action('\Sinevia\Cms\Http\Controllers\CmsController@postMenuMoveToTrash') . self::buildQueryString($queryData);
+    }
+
     public static function adminPageManager($queryData = []) {
         return action('\Sinevia\Cms\Http\Controllers\CmsController@getPageManager') . self::buildQueryString($queryData);
     }
@@ -115,11 +147,11 @@ class Links {
     public static function adminTranslationUpdate($queryData = []) {
         return action('\Sinevia\Cms\Http\Controllers\CmsController@getTranslationUpdate') . self::buildQueryString($queryData);
     }
-    
+
     public static function adminTranslationValueCreate($queryData = []) {
         return action('\Sinevia\Cms\Http\Controllers\CmsController@postTranslationValueCreate') . self::buildQueryString($queryData);
     }
-    
+
     public static function adminTranslationValueDelete($queryData = []) {
         return action('\Sinevia\Cms\Http\Controllers\CmsController@postTranslationValueDelete') . self::buildQueryString($queryData);
     }
