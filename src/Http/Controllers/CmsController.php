@@ -6,6 +6,8 @@ namespace Sinevia\Cms\Http\Controllers;
  * Contains simple CMS functionality
  */
 class CmsController extends \Illuminate\Routing\Controller {
+    
+    use MenuTrait;
 
     function anyIndex() {
         return $this->getPageManager();
