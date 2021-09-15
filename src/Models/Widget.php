@@ -6,53 +6,57 @@ class Widget extends BaseModel {
 
     //protected $connection = 'sinevia';
     protected $table = 'snv_cms_widget';
-    
+
     public static function path($type = "") {
         $widgetsPath = trim(config('cms.paths.widgets', ''));
-        
+
         if ($widgetsPath == '') {
             return '';
         }
-        
+
         return resource_path($widgetsPath . '/' . trim($type));
     }
-    
+
     public function render() {
         if ($this->Status != "Published") {
             return '';
         }
-        
+
         $templateFilePath = self::path($this->Type) . '/template.phtml';
         if (file_exists($templateFilePath) == false) {
             return 'Template file does not exist';
         }
-        
+
         $parameters = trim($this->Parameters) == "" ? [] : json_decode(trim($this->Parameters), true);
         $str = \Sinevia\Cms\Helpers\Template::fromFile($templateFilePath, $parameters);
         return \Sinevia\Cms\Helpers\CmsHelper::blade($str);
+    }
+
+    public static function renderWidget($widgetId) {
+        $widget = self::find($widgetId);
+        if ($widget == null) {
+            return '';
+        }
+        return $widget->render();
     }
 
     public static function renderWidgets($string) {
         preg_match_all("|\[\[WIDGET_(.*)\]\]|U", $string, $out, PREG_PATTERN_ORDER);
         $widgetIds = $out[1];
         foreach ($widgetIds as $widgetId) {
-            $widget = self::find($widgetId);
-            $content = '';
-            if ($widget != null) {
-                $content = $widget->render();
-            }
+            $content = self::renderWidget($widgetId);
             $string = str_replace("[[WIDGET_$widgetId]]", $content, $string);
         }
         return $string;
     }
-    
+
     public static function tableCreate() {
         $o = new self;
 
         if (\Schema::connection($o->connection)->hasTable($o->table) == true) {
             return true;
         }
-        
+
         return \Schema::connection($o->connection)->create($o->table, function (\Illuminate\Database\Schema\Blueprint $table) use ($o) {
                     $table->engine = 'InnoDB';
                     $table->string($o->primaryKey, 40)->primary();
@@ -71,11 +75,12 @@ class Widget extends BaseModel {
 
     public static function tableDelete() {
         $o = new self;
-        
+
         if (\Schema::connection($o->connection)->hasTable($o->table) == false) {
             return true;
         }
-        
+
         return \Schema::connection($o->connection)->drop($o->table);
     }
+
 }
