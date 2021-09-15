@@ -4,7 +4,6 @@ namespace Sinevia\Cms\Models;
 
 class Widget extends BaseModel {
 
-    //protected $connection = 'sinevia';
     protected $table = 'snv_cms_widget';
     
     public static function path($type = "") {
@@ -28,7 +27,8 @@ class Widget extends BaseModel {
         }
         
         $parameters = trim($this->Parameters) == "" ? [] : json_decode(trim($this->Parameters), true);
-        return \Sinevia\Cms\Helpers\Template::fromFile($templateFilePath, $parameters);
+        $str = \Sinevia\Cms\Helpers\Template::fromFile($templateFilePath, $parameters);
+        return \Sinevia\Cms\Helpers\CmsHelper::blade($str);
     }
 
     public static function renderWidgets($string) {
