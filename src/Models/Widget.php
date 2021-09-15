@@ -2,66 +2,101 @@
 
 namespace Sinevia\Cms\Models;
 
-class Widget extends BaseModel {
+class Block extends BaseModel {
 
-    protected $table = 'snv_cms_widget';
-    
-    public static function path($type = "") {
-        $widgetsPath = trim(config('cms.paths.widgets', ''));
-        
-        if ($widgetsPath == '') {
-            return '';
+    //protected $connection = 'sinevia';
+    protected $table = 'snv_cms_block';
+    protected $primaryKey = 'Id';
+    public $timestamps = true;
+    public $incrementing = false;
+    public $useMicroId = true;
+
+    public function createVersion() {
+        $blockWithTranslationsArray = $this->toArray();
+        $version = Version::createVersion('CmsBlock', $this->Id, $blockWithTranslationsArray);
+        if (is_null($version) == false) {
+            return true;
         }
-        
-        return resource_path($widgetsPath . '/' . trim($type));
+        return false;
     }
-    
+
     public function render() {
         if ($this->Status != "Published") {
             return '';
         }
-        
-        $templateFilePath = self::path($this->Type) . '/template.phtml';
-        if (file_exists($templateFilePath) == false) {
-            return 'Template file does not exist';
+
+        $blockTranslation = $block->translation('en');
+        $blockContent = $blockTranslation->Content;
+        $string = \Sinevia\Cms\Helpers\Template::fromString($blockContent, $options);
+        $string = \Sinevia\Cms\Helpers\CmsHelper::blade($string);
+
+        // Render any embedded blocks in the current block
+        if (strpos($string, '[[BLOCK_') !== false) {
+            $string = self::renderBlocks($string);
         }
-        
-        $parameters = trim($this->Parameters) == "" ? [] : json_decode(trim($this->Parameters), true);
-        $str = \Sinevia\Cms\Helpers\Template::fromFile($templateFilePath, $parameters);
-        return \Sinevia\Cms\Helpers\CmsHelper::blade($str);
+
+        return $string;
     }
 
-    public static function renderWidgets($string) {
-        preg_match_all("|\[\[WIDGET_(.*)\]\]|U", $string, $out, PREG_PATTERN_ORDER);
-        $widgetIds = $out[1];
-        foreach ($widgetIds as $widgetId) {
-            $widget = self::find($widgetId);
-            $content = '';
-            if ($widget != null) {
-                $content = $widget->render();
+    public static function renderBlock(string $blockId, array $options = []) {
+        $block = \Sinevia\Cms\Models\Block::find($blockId);
+        if ($block == null) {
+            return '';
+        }
+        
+        return $block->render();
+    }
+
+    public static function renderBlocks($string) {
+        preg_match_all("|\[\[BLOCK_(.*)\]\]|U", $string, $out, PREG_PATTERN_ORDER);
+        $blockIds = $out[1];
+        foreach ($blockIds as $blockId) {
+            $blockContentDynamic = self::renderBlock($blockId);
+            $string = str_replace("[[BLOCK_$blockId]]", $blockContentDynamic, $string);
+
+            // Render any embedded blocks in the current block
+            if (strpos($string, '[[BLOCK_') !== false) {
+                $string = self::renderBlocks($string);
             }
-            $string = str_replace("[[WIDGET_$widgetId]]", $content, $string);
         }
         return $string;
     }
-    
+
+    public function restoreVersion($versionId) {
+        $version = Version::find($versionId);
+        if (is_null($version)) {
+            return false;
+        }
+        $data = $version->getData();
+        if (is_null($data)) {
+            return false;
+        }
+
+        //$translations = isset($data['translations'])
+        //$title = isset($data['Title']) ? $data['Title'] : '';
+    }
+
+    public function translations() {
+        return $this->hasMany('Sinevia\Cms\Models\BlockTranslation', 'BlockId');
+    }
+
+    public function translation($languageCode) {
+        return $this->translations()->where('Language', '=', $languageCode)->first();
+    }
+
     public static function tableCreate() {
         $o = new self;
 
         if (\Schema::connection($o->connection)->hasTable($o->table) == true) {
             return true;
         }
-        
+
         return \Schema::connection($o->connection)->create($o->table, function (\Illuminate\Database\Schema\Blueprint $table) use ($o) {
                     $table->engine = 'InnoDB';
                     $table->string($o->primaryKey, 40)->primary();
-                    $table->string('ParentId', 40)->nullable()->default('');
                     $table->enum('Status', ['Draft', 'Published', 'Unpublished', 'Deleted'])->default('Draft');
-                    $table->string('Type', 40)->nullable()->default(NULL);
                     $table->string('Title', 255);
-                    $table->integer('Sequence')->nullable()->default(NULL);
-                    $table->integer('Cache')->nullable()->default(NULL);
-                    $table->text('Parameters')->nullable()->default(NULL);
+                    $table->text('Content')->nullable()->default(NULL);
                     $table->datetime('CreatedAt')->nullable()->default(NULL);
                     $table->datetime('UpdatedAt')->nullable()->default(NULL);
                     $table->datetime('DeletedAt')->nullable()->default(NULL);
@@ -70,11 +105,12 @@ class Widget extends BaseModel {
 
     public static function tableDelete() {
         $o = new self;
-        
+
         if (\Schema::connection($o->connection)->hasTable($o->table) == false) {
             return true;
         }
-        
+
         return \Schema::connection($o->connection)->drop($o->table);
     }
+
 }
