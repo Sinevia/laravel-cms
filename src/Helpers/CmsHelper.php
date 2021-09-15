@@ -15,7 +15,7 @@ class CmsHelper {
     public static function success($message = '', $data = []) {
         return json_encode(['status' => 'success', 'message' => $message, 'data' => $data]);
     }
-    
+
     public static function arrayToHtmlAttributes(array $array) {
         if (count($array) < 1) {
             return '';
@@ -30,7 +30,7 @@ class CmsHelper {
         }
         return count($attributes) > 0 ? (" " . implode(" ", $attributes)) : "";
     }
-    
+
     /**
      * Lists the files and folders and returns them in a handy array.
      * @access public
@@ -62,6 +62,32 @@ class CmsHelper {
         closedir($handler);
         // 5. Returning the file array
         return $items;
+    }
+
+    /**
+     * Renders a string with Blade
+     * @param string $value
+     * @param array $args
+     * @return string
+     * @throws \Exception
+     */
+    public static function blade(string $value, array $args = array()) {
+        $generated = \Blade::compileString($value);
+        
+        $args['__env'] = app(\Illuminate\View\Factory::class);
+        
+        ob_start() and extract($args, EXTR_SKIP);
+
+        try {
+            eval('?>' . $generated);
+        } catch (\Exception $e) {
+            ob_get_clean();
+            throw $e;
+        }
+
+        $content = ob_get_clean();
+
+        return $content;
     }
 
 }
