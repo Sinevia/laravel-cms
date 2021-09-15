@@ -6,7 +6,7 @@ namespace Sinevia\Cms\Http\Controllers;
  * Contains simple CMS functionality
  */
 class CmsController extends \Illuminate\Routing\Controller {
-    
+
     use MenuTrait;
 
     function anyIndex() {
@@ -45,7 +45,7 @@ class CmsController extends \Illuminate\Routing\Controller {
                 ':alpha' => '([a-zA-Z0-9-_]+)',
             );
             $aliases = \Sinevia\Cms\Models\Page::pluck('Alias', 'Id')->toArray();
-            $aliases = array_filter($aliases, function($alias) {
+            $aliases = array_filter($aliases, function ($alias) {
                 return \Illuminate\Support\Str::contains($alias, [':']);
             });
             foreach ($aliases as $pageId => $alias) {
@@ -99,20 +99,20 @@ class CmsController extends \Illuminate\Routing\Controller {
                         'page_title' => $pageTitle,
                         'page_content' => \Sinevia\Cms\Helpers\Template::fromString($pageContent),
             ]);
-
-            $webpage = \Sinevia\Cms\Models\Block::renderBlocks($webpage);
-            return \Sinevia\Cms\Models\Widget::renderWidgets($webpage);
+        } else {
+            $webpage = \Sinevia\Cms\Helpers\Template::fromString($pageContent, [
+                        'page' => $page,
+                        'pageTranslation' => $pageTranslation,
+            ]);
         }
 
-        $webpage = \Sinevia\Cms\Helpers\Template::fromString($pageContent, [
-                    'page' => $page,
-                    'pageTranslation' => $pageTranslation,
-        ]);
 
-        $webpage = \Sinevia\Cms\Models\Block::renderBlocks($webpage);
-        return \Sinevia\Cms\Models\Widget::renderWidgets($webpage);
+        $webpageRenderedWithBlade = \Sinevia\Cms\Helpers\CmsHelper::blade($webpage);
 
-        //require_once app_path('Helpers/helpers.php');
+        $webpageWithBlocks = \Sinevia\Cms\Models\Block::renderBlocks($webpageRenderedWithBlade);
+        $webpageWithWidgets = \Sinevia\Cms\Models\Widget::renderWidgets($webpageWithBlocks);
+        
+        return $webpageWithWidgets;
     }
 
     function blockEditorBlocksToHtml($blocks) {
@@ -176,11 +176,11 @@ class CmsController extends \Illuminate\Routing\Controller {
         $sort = request('sort');
         $page = request('page', 0);
         $results_per_page = 20;
-        
+
         if (in_array(strtolower($sort), ["asc", "desc"]) == false) {
             $sort = 'ASC';
         }
-        
+
         \Session::put('cms_block_manager_by', $orderby); // Keep for session
         \Session::put('cms_block_manager_sort', $sort);  // Keep for session
 
@@ -367,11 +367,11 @@ class CmsController extends \Illuminate\Routing\Controller {
         $sort = request('sort');
         $page = request('page', 0);
         $results_per_page = 20;
-        
+
         if (in_array(strtolower($sort), ["asc", "desc"]) == false) {
             $sort = 'ASC';
         }
-        
+
         \Session::put('cms_translation_manager_by', $orderby); // Keep for session
         \Session::put('cms_translation_manager_sort', $sort);  // Keep for session
 
@@ -424,11 +424,11 @@ class CmsController extends \Illuminate\Routing\Controller {
         $sort = request('sort');
         $page = request('page', 0);
         $results_per_page = 20;
-        
+
         if (in_array(strtolower($sort), ["asc", "desc"]) == false) {
             $sort = 'ASC';
         }
-        
+
         \Session::put('cms_widget_manager_by', $orderby); // Keep for session
         \Session::put('cms_widget_manager_sort', $sort);  // Keep for session
 
@@ -849,7 +849,6 @@ class CmsController extends \Illuminate\Routing\Controller {
 
         $translations = $page->translations;
 
-
         \DB::beginTransaction();
         try {
             $page->Status = $status;
@@ -912,7 +911,6 @@ class CmsController extends \Illuminate\Routing\Controller {
             $template->UpdatedAt = date('Y-m-d H:i:s');
 
             $result = $template->save();
-
 
             $translation = new \Sinevia\Cms\Models\TemplateTranslation;
             $translation->TemplateId = $template->Id;
@@ -1117,7 +1115,6 @@ class CmsController extends \Illuminate\Routing\Controller {
             $translationKey->Key = $key;
 
             $result = $translationKey->save();
-
 
             $translationValue = new \Sinevia\Cms\Models\TranslationValue;
             $translationValue->KeyId = $translationKey->Id;
