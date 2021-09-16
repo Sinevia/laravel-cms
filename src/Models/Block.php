@@ -20,15 +20,24 @@ class Block extends BaseModel {
         return false;
     }
     
-    public static function renderBlock(string $blockId, array $options = []) {
-        $block = \Sinevia\Cms\Models\Block::find($blockId);
-        if ($block != null) {
-            $blockTranslation = $block->translation('en');
-            $blockContent = $blockTranslation->Content;
-        } else {
-            $blockContent = '';
+    public function render(array $options = []) {
+        if ($this->Status != "Published") {
+            return '';
         }
-        $string = \Sinevia\Cms\Helpers\Template::fromString($blockContent, $options);
+        
+        $blockTranslation = $this->translation('en');
+        $blockContent = $blockTranslation->Content;
+        
+        $str = \Sinevia\Cms\Helpers\Template::fromString($blockContent, $options);
+        return \Sinevia\Cms\Helpers\CmsHelper::blade($str);
+    }
+    
+    public static function renderBlock(string $blockId, array $options = []) {
+        $block = self::find($blockId);
+        if ($block == null) {
+            return '';
+        }
+        $string = $block->render();
 
         // Render any embedded blocks in the current block
         if (strpos($string, '[[BLOCK_') !== false) {
@@ -42,20 +51,8 @@ class Block extends BaseModel {
         preg_match_all("|\[\[BLOCK_(.*)\]\]|U", $string, $out, PREG_PATTERN_ORDER);
         $blockIds = $out[1];
         foreach ($blockIds as $blockId) {
-            $block = \Sinevia\Cms\Models\Block::find($blockId);
-            if ($block != null) {
-                $blockTranslation = $block->translation('en');
-                $blockContent = $blockTranslation->Content;
-            } else {
-                $blockContent = '';
-            }
-            $blockContentDynamic = \Sinevia\Cms\Helpers\Template::fromString($blockContent);
-            $string = str_replace("[[BLOCK_$blockId]]", $blockContentDynamic, $string);
-            
-            // Render any embedded blocks in the current block
-            if (strpos($string, '[[BLOCK_') !== false) {
-                $string = self::renderBlocks($string);
-            }
+            $content = self::renderBlock($blockId);
+            $string = str_replace("[[BLOCK_$blockId]]", $content, $string);
         }
         return $string;
     }
