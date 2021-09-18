@@ -37,7 +37,7 @@ class Block extends BaseModel {
         if ($block == null) {
             return '';
         }
-        $string = $block->render();
+        $string = $block->render($options);
 
         // Render any embedded blocks in the current block
         if (strpos($string, '[[BLOCK_') !== false) {
