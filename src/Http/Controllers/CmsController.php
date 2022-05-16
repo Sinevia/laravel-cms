@@ -411,7 +411,7 @@ class CmsController extends \Illuminate\Routing\Controller {
 
     function getWidgetManager() {
         $view = request('view', '');
-        $filterStatus = request('filter_status', 'not_deleted');
+        $filterStatus = request('filter_status', '');
         if ($view == 'trash') {
             $filterStatus = 'Deleted';
         }
@@ -433,6 +433,12 @@ class CmsController extends \Illuminate\Routing\Controller {
         \Session::put('cms_widget_manager_sort', $sort);  // Keep for session
 
         $q = \Sinevia\Cms\Models\Widget::getModel();
+        if ($filterStatus == "") {
+            $q = $q->where('Status', '<>', 'Deleted');
+        }
+        if ($filterStatus != "") {
+            $q = $q->where('Status', '=', $filterStatus);
+        }
         $q = $q->orderBy($orderby, $sort);
         $widgets = $q->paginate($results_per_page);
 
