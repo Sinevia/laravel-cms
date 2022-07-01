@@ -109,6 +109,8 @@ The widgets are predefined dynamic modules which can be embedded into pages and 
 
 To embed in page or template use a shortcode like this: [[WIDGET_20180509052702261348]]
 
+More info: https://github.com/Sinevia/laravel-cms/wiki/Widgets
+
 ## Human Friendly Aliases ##
 The following shortcuts can be used to create human friendly page aliases, that can be used for pages with dynamic content
 
