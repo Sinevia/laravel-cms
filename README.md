@@ -65,16 +65,20 @@ After running the vendor:publish command, the CMS settings will be published in 
 1. CMS Endpoint (public, catch all)
 
 ```php
-Route::group(['prefix' => '/'], function () {
-    // will match only one level deep
-    Route::any('/{path?}', '\Sinevia\Cms\Http\Controllers\CmsController@anyPageView');
+\Route::group(['prefix' => '/'], function () {
+    // will match only one level deep (not recommended)
+    \Route::any('/{path?}', '\Sinevia\Cms\Http\Controllers\CmsController@anyPageView');
     
     // or use with regex expression to match any level
-    Route::any('/{path?}', '\Sinevia\Cms\Http\Controllers\CmsController@anyPageView')
+    \Route::any('/{path?}', '\Sinevia\Cms\Http\Controllers\CmsController@anyPageView')
         ->where('path', '([a-zA-z0-9\/\-]++)');
         
     // or use with simpler regex expression to match any level
-    Route::any('/{path?}', '\Sinevia\Cms\Http\Controllers\CmsController@anyPageView')
+    \Route::any('/{path?}', '\Sinevia\Cms\Http\Controllers\CmsController@anyPageView')
+        ->where('path', '.+');
+
+    // or if you prefer using the class path (recommended)
+    \Route::any('/{path?}', [\Sinevia\Cms\Http\Controllers\CmsController::class, 'anyPageView'])
         ->where('path', '.+');
 });
 ```
@@ -82,9 +86,12 @@ Route::group(['prefix' => '/'], function () {
 2. Admin endpoint (private, protect with middleware)
 
 ```php
-Route::group(['prefix' => '/admin'], function () {
-    Route::group(['middleware'=>'adminonly'], function(){
-        AdvancedRoute::controller('/cms', '\Sinevia\Cms\Http\Controllers\CmsController');
+\Route::group(['prefix' => '/admin'], function () {
+    \Route::group(['middleware'=>'adminonly'], function(){
+        \AdvancedRoute::controller('/cms', '\Sinevia\Cms\Http\Controllers\CmsController');
+
+        // or if your prefer using class path (recommended)
+        \AdvancedRoute::controller('/cms', \Sinevia\Cms\Http\Controllers\CmsController::class);
     });
 });
 ```
