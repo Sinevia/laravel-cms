@@ -32,6 +32,7 @@ class TranslationKey extends BaseModel {
                 $table->string('Key', 255)->index();
                 $table->datetime('CreatedAt')->nullable()->default(null);
                 $table->datetime('UpdatedAt')->nullable()->default(null);
+                $table->datetime('DeletedAt')->nullable()->default(null);
             });
         }
 
