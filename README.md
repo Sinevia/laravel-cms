@@ -1,5 +1,6 @@
 # Laravel CMS #
 
+[![Tests](https://github.com/Sinevia/laravel-cms/actions/workflows/tests.yml/badge.svg)](https://github.com/Sinevia/laravel-cms/actions/workflows/tests.yml)
 [![Total Downloads](https://poser.pugx.org/sinevia/laravel-cms/downloads)](https://packagist.org/packages/sinevia/laravel-cms)
 [![Latest Stable Version](https://poser.pugx.org/sinevia/laravel-cms/v/stable)](https://packagist.org/packages/sinevia/laravel-cms)
 [![Latest Unstable Version](https://poser.pugx.org/sinevia/laravel-cms/v/unstable)](https://packagist.org/packages/sinevia/laravel-cms)
@@ -179,7 +180,23 @@ return viewInTemplate('Login', $pageContent)
 
 ## Changelog
 
-2021.07.05 - Added support for Bootstrap 5
+- 2026.07.29 - Added comprehensive test suite (88 tests) and GitHub Actions CI workflow
+- 2023.11.13 - Improved TranslationKey fallback logic for missing translations
+- 2021.09.04 - Added Menus and MenuItems management with hierarchical tree support
+- 2021.07.05 - Added support for Bootstrap 5
+- 2018.07.02 - Added Summernote and CKEditor WYSIWYG editors
+- 2018.06.18 - Added TranslationKey/TranslationValue i18n system
+- 2018.05.17 - Added language-based page aliases
+- 2018.01.21 - Added versioning table for pages, templates, and blocks
+- 2018.01.11 - Widgets updated to take parameters
+- 2018.01.06 - Initial release
+
+## Testing ##
+
+```sh
+composer install
+composer test
+```
 
 ## Alternatives
 
